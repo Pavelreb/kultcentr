@@ -137,3 +137,29 @@ class Achievement(models.Model):
         verbose_name = "Достижение"
         verbose_name_plural = "Достижения"
         ordering = ["-date", "-created_at"]
+
+
+class Document(models.Model):
+    """Документ учреждения (PDF, DOC и т.п.)"""
+
+    title = models.CharField(max_length=255, verbose_name="Название документа")
+    description = models.CharField(
+        max_length=500, blank=True, null=True, verbose_name="Краткое описание"
+    )
+    file = models.FileField(
+        upload_to="about/documents/", blank=True, null=True, verbose_name="Файл"
+    )
+    file_url = models.URLField(
+        blank=True, null=True, verbose_name="Ссылка на файл"
+    )
+    order = models.PositiveIntegerField(default=0, verbose_name="Порядок")
+    is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Документ"
+        verbose_name_plural = "Документы"
+        ordering = ["order", "title"]

@@ -3,12 +3,13 @@
 from rest_framework import viewsets, generics, permissions, status, filters
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import InstitutionInfo, StaffMember, Club, Achievement
+from .models import InstitutionInfo, StaffMember, Club, Achievement, Document
 from .serializers import (
     InstitutionInfoSerializer,
     StaffMemberSerializer,
     ClubSerializer,
     AchievementSerializer,
+    DocumentSerializer,
 )
 
 
@@ -96,3 +97,12 @@ class AchievementViewSet(PublishedFilterMixin, viewsets.ModelViewSet):
     parser_classes = [MultiPartParser, FormParser]
     filter_backends = [filters.SearchFilter]
     search_fields = ["title", "excerpt", "content"]
+
+
+class DocumentViewSet(PublishedFilterMixin, viewsets.ModelViewSet):
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
+    permission_classes = [IsEditorOrReadOnly]
+    parser_classes = [MultiPartParser, FormParser]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["title", "description"]
