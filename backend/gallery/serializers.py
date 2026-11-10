@@ -5,6 +5,8 @@ from .models import Album, Photo, PhotoLike, PhotoComment
 
 
 class PhotoCommentSerializer(serializers.ModelSerializer):
+    # id альбома — нужен фронту для ссылки из «Мои комментарии»
+    album = serializers.IntegerField(source="photo.album_id", read_only=True)
     user_name = serializers.ReadOnlyField(source="user.username")
     user_first_name = serializers.CharField(source="user.first_name", read_only=True)
     user_last_name = serializers.CharField(source="user.last_name", read_only=True)
@@ -18,6 +20,7 @@ class PhotoCommentSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "photo",
+            "album",
             "user",
             "user_name",
             "user_first_name",

@@ -6,9 +6,10 @@
     
     <!-- Список комментариев -->
     <div v-if="comments.length > 0" class="space-y-3 max-h-60 overflow-y-auto">
-      <div 
-        v-for="comment in comments" 
+      <div
+        v-for="comment in comments"
         :key="comment.id"
+        :id="`photo-comment-${comment.id}`"
         class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3"
       >
         <div class="flex justify-between items-start">

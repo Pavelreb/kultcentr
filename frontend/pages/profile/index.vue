@@ -203,7 +203,7 @@
                 </svg>
               </div>
               
-              <NuxtLink :to="post.is_published ? `/posts/${post.id}` : `/posts/edit-${post.id}`" class="block flex-1 min-w-0">
+              <NuxtLink :to="post.is_published ? `/posts/${post.id}` : `/posts/edit-${post.id}`" class="block flex-1 min-w-0" @click="saveProfileScroll">
                 <h3 class="text-base font-semibold text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">
                   {{ post.title }}
                 </h3>
@@ -288,7 +288,7 @@
               :key="event.id" 
               class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl hover:shadow transition"
             >
-              <NuxtLink :to="event.is_published ? `/events/${event.id}` : `/events/edit-${event.id}`" class="block">
+              <NuxtLink :to="event.is_published ? `/events/${event.id}` : `/events/edit-${event.id}`" class="block" @click="saveProfileScroll">
                 <h3 class="text-base font-semibold text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">
                   {{ event.title }}
                 </h3>
@@ -343,7 +343,11 @@
               :key="comment.id" 
               class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl hover:shadow transition"
             >
-              <NuxtLink :to="comment.type === 'post' ? `/posts/${comment.post}` : `/gallery/${comment.photo}`" class="block">
+              <NuxtLink
+                :to="comment.type === 'post' ? `/posts/${comment.post}#comment-${comment.id}` : `/gallery/${comment.album}?photo=${comment.photo}#photo-comment-${comment.id}`"
+                class="block"
+                @click="saveProfileScroll"
+              >
                 <p class="text-gray-700 dark:text-gray-300">{{ comment.content }}</p>
                 <div class="flex items-center gap-3 mt-1">
                   <span class="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1">
@@ -553,14 +557,33 @@ const loadUserEvents = async () => {
   }
 }
 
+// ============================================
+// Возврат «назад» к тому же месту профиля:
+// при клике на пост/событие/комментарий запоминаем
+// скролл, при возврате — восстанавливаем (одноразово)
+// ============================================
+const PROFILE_SCROLL_KEY = 'profile_scroll'
+
+const saveProfileScroll = () => {
+  sessionStorage.setItem(PROFILE_SCROLL_KEY, String(window.scrollY))
+}
+
+const restoreProfileScroll = async () => {
+  const saved = sessionStorage.getItem(PROFILE_SCROLL_KEY)
+  if (!saved) return
+  sessionStorage.removeItem(PROFILE_SCROLL_KEY)
+  await nextTick()
+  smoothScrollTo(Number(saved))
+}
+
 const loadUserComments = async () => {
   try {
     let comments = []
-    
+
     try {
       const postCommentsRes = await apiFetch(`${API_URL}/comments/my_comments/`, {
       })
-      
+
       if (postCommentsRes.ok) {
         const data = await postCommentsRes.json()
         comments = [...comments, ...data.map(c => ({ ...c, type: 'post' }))]
@@ -568,11 +591,11 @@ const loadUserComments = async () => {
     } catch (e) {
       console.error('Ошибка загрузки комментариев к постам:', e)
     }
-    
+
     try {
       const photoCommentsRes = await apiFetch(`${API_URL}/photo-comments/my_comments/`, {
       })
-      
+
       if (photoCommentsRes.ok) {
         const data = await photoCommentsRes.json()
         comments = [...comments, ...data.map(c => ({ ...c, type: 'photo' }))]
@@ -580,7 +603,7 @@ const loadUserComments = async () => {
     } catch (e) {
       console.error('Ошибка загрузки комментариев к фото:', e)
     }
-    
+
     comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     allComments.value = comments
   } catch (e) {
@@ -608,6 +631,9 @@ onMounted(async () => {
   if (authStore.isAuthenticated) {
     await loadUserComments()
   }
+
+  // Все секции отрисованы — восстанавливаем позицию скролла (возврат «назад»)
+  restoreProfileScroll()
 })
 </script>
 
