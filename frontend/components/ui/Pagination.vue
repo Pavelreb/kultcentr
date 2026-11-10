@@ -5,33 +5,33 @@
     <button
       @click="goToPage(currentPage - 1)"
       :disabled="currentPage === 1"
-      class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+      class="px-3 py-2 max-sm:px-2 max-sm:py-1.5 rounded-lg text-sm max-sm:text-xs font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
       :class="currentPage === 1 
         ? 'text-gray-400 dark:text-gray-600 bg-gray-100 dark:bg-gray-800' 
         : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'"
     >
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
       </svg>
     </button>
     
     <!-- Номера страниц -->
-    <div class="flex gap-1">
+    <div class="flex gap-1 max-sm:gap-0.5">
       <button
-        v-if="showFirstDots"
+        v-if="showFirst"
         @click="goToPage(1)"
-        class="px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
+        class="px-3.5 py-2 max-sm:px-2.5 max-sm:py-1.5 rounded-lg text-sm max-sm:text-xs font-medium transition-all duration-200 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
       >
         1
       </button>
       
-      <span v-if="showFirstDots" class="px-2 py-2 text-gray-400 dark:text-gray-600">…</span>
+      <span v-if="showFirstDots" class="px-2 max-sm:px-1 py-2 max-sm:py-1.5 text-sm max-sm:text-xs text-gray-400 dark:text-gray-600">…</span>
       
       <button
         v-for="page in visiblePages"
         :key="page"
         @click="goToPage(page)"
-        class="px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+        class="px-3.5 py-2 max-sm:px-2.5 max-sm:py-1.5 rounded-lg text-sm max-sm:text-xs font-medium transition-all duration-200"
         :class="page === currentPage
           ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 scale-105'
           : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'"
@@ -39,12 +39,12 @@
         {{ page }}
       </button>
       
-      <span v-if="showLastDots" class="px-2 py-2 text-gray-400 dark:text-gray-600">…</span>
+      <span v-if="showLastDots" class="px-2 max-sm:px-1 py-2 max-sm:py-1.5 text-sm max-sm:text-xs text-gray-400 dark:text-gray-600">…</span>
       
       <button
-        v-if="showLastDots"
+        v-if="showLast"
         @click="goToPage(totalPages)"
-        class="px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
+        class="px-3.5 py-2 max-sm:px-2.5 max-sm:py-1.5 rounded-lg text-sm max-sm:text-xs font-medium transition-all duration-200 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
       >
         {{ totalPages }}
       </button>
@@ -54,12 +54,12 @@
     <button
       @click="goToPage(currentPage + 1)"
       :disabled="currentPage === totalPages"
-      class="px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+      class="px-3 py-2 max-sm:px-2 max-sm:py-1.5 rounded-lg text-sm max-sm:text-xs font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
       :class="currentPage === totalPages 
         ? 'text-gray-400 dark:text-gray-600 bg-gray-100 dark:bg-gray-800' 
         : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'"
     >
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
       </svg>
     </button>
@@ -86,18 +86,24 @@ const props = defineProps({
 
 const emit = defineEmits(['page-change'])
 
-const showFirstDots = computed(() => {
-  return props.currentPage > Math.ceil(props.maxVisible / 2) + 1
+// На маленьких экранах (<640px) показываем не больше 3 номеров,
+// чтобы пагинация помещалась в ширину экрана
+const isSmallScreen = ref(false)
+onMounted(() => {
+  const update = () => { isSmallScreen.value = window.innerWidth < 640 }
+  update()
+  window.addEventListener('resize', update)
+  onBeforeUnmount(() => window.removeEventListener('resize', update))
 })
 
-const showLastDots = computed(() => {
-  return props.currentPage < props.totalPages - Math.ceil(props.maxVisible / 2)
-})
+const effectiveMaxVisible = computed(() =>
+  isSmallScreen.value ? Math.min(props.maxVisible, 3) : props.maxVisible
+)
 
 const visiblePages = computed(() => {
   const total = props.totalPages
   const current = props.currentPage
-  const maxVisible = props.maxVisible
+  const maxVisible = effectiveMaxVisible.value
   
   if (total <= maxVisible) {
     return Array.from({ length: total }, (_, i) => i + 1)
@@ -112,6 +118,17 @@ const visiblePages = computed(() => {
   
   return Array.from({ length: end - start + 1 }, (_, i) => start + i)
 })
+
+// Кнопки первой/последней страницы и многоточия — от реального содержимого
+// видимых страниц, без дублей (раньше при currentPage=5 и totalPages=5
+// выводилось «1 … 1 2 3 4 5»)
+const firstVisible = computed(() => visiblePages.value[0])
+const lastVisible = computed(() => visiblePages.value[visiblePages.value.length - 1])
+
+const showFirst = computed(() => firstVisible.value > 1)
+const showFirstDots = computed(() => firstVisible.value > 2)
+const showLast = computed(() => lastVisible.value < props.totalPages)
+const showLastDots = computed(() => lastVisible.value < props.totalPages - 1)
 
 const goToPage = (page) => {
   if (page < 1 || page > props.totalPages || page === props.currentPage) return
