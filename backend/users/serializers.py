@@ -8,7 +8,10 @@ from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+from django.db.models import Sum
 from posts.models import Post  # ✅ Добавляем импорт для подсчёта постов
+from likes.models import Like
+from comments.models import Comment
 
 User = get_user_model()
 
@@ -54,6 +57,9 @@ class UserSerializer(serializers.ModelSerializer):
     avatar_url = serializers.SerializerMethodField()
     posts_count = serializers.SerializerMethodField()  # ✅ НОВОЕ ПОЛЕ
     subscribers_count = serializers.SerializerMethodField()  # ✅ НОВОЕ ПОЛЕ (заглушка)
+    total_views = serializers.SerializerMethodField()
+    total_likes = serializers.SerializerMethodField()
+    total_comments = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -75,8 +81,44 @@ class UserSerializer(serializers.ModelSerializer):
             "avatar_url",
             "posts_count",
             "subscribers_count",  # ✅ ДОБАВЛЯЕМ
+            "phone",
+            "vk",
+            "max",
+            "ok",
+            "rutube",
+            "show_phone",
+            "show_email",
+            "show_socials",
+            "total_views",
+            "total_likes",
+            "total_comments",
         ]
         read_only_fields = ["id", "username", "date_joined", "role", "role_display"]
+
+    def to_representation(self, instance):
+        """Приватность: для чужих пользователей скрываем данные по настройкам"""
+        data = super().to_representation(instance)
+
+        request = self.context.get("request")
+        is_self_or_editor = (
+            request
+            and request.user.is_authenticated
+            and (request.user.id == instance.id or request.user.role == "editor")
+        )
+
+        if not is_self_or_editor:
+            # Email показываем публично только с разрешения пользователя
+            if not instance.show_email:
+                data["email"] = None
+            if not instance.show_phone:
+                data["phone"] = None
+            if not instance.show_socials:
+                data["vk"] = None
+                data["max"] = None
+                data["ok"] = None
+                data["rutube"] = None
+
+        return data
 
     def get_role_display(self, obj):
         return obj.get_role_display()
@@ -108,6 +150,25 @@ class UserSerializer(serializers.ModelSerializer):
         # TODO: Добавить модель подписок
         return 0
 
+    def get_total_views(self, obj):
+        """Суммарные просмотры опубликованных постов пользователя"""
+        return (
+            Post.objects.filter(author=obj, is_published=True).aggregate(
+                total=Sum("views")
+            )["total"]
+            or 0
+        )
+
+    def get_total_likes(self, obj):
+        """Лайки на опубликованных постах пользователя"""
+        return Like.objects.filter(post__author=obj, post__is_published=True).count()
+
+    def get_total_comments(self, obj):
+        """Комментарии к опубликованным постам пользователя"""
+        return Comment.objects.filter(
+            post__author=obj, post__is_published=True
+        ).count()
+
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -120,6 +181,14 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "birth_date",
             "bio",
             "avatar",
+            "phone",
+            "vk",
+            "max",
+            "ok",
+            "rutube",
+            "show_phone",
+            "show_email",
+            "show_socials",
         ]
 
     def update(self, instance, validated_data):
@@ -138,6 +207,16 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         instance.birth_date = validated_data.get("birth_date", instance.birth_date)
         instance.bio = validated_data.get("bio", instance.bio)
         instance.avatar = validated_data.get("avatar", instance.avatar)
+        instance.phone = validated_data.get("phone", instance.phone)
+        instance.vk = validated_data.get("vk", instance.vk)
+        instance.max = validated_data.get("max", instance.max)
+        instance.ok = validated_data.get("ok", instance.ok)
+        instance.rutube = validated_data.get("rutube", instance.rutube)
+        instance.show_phone = validated_data.get("show_phone", instance.show_phone)
+        instance.show_email = validated_data.get("show_email", instance.show_email)
+        instance.show_socials = validated_data.get(
+            "show_socials", instance.show_socials
+        )
         instance.save()
         return instance
 

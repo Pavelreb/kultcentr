@@ -39,10 +39,25 @@
         required
       />
       
-      <UiButton 
-        type="submit" 
+      <!-- Согласие с условиями -->
+      <label class="flex items-start gap-2.5 mt-4 mb-4 cursor-pointer text-sm text-gray-600 dark:text-gray-400">
+        <input
+          v-model="acceptedTerms"
+          type="checkbox"
+          class="w-4 h-4 mt-0.5 rounded text-blue-600 flex-shrink-0"
+        />
+        <span>
+          Я принимаю условия
+          <NuxtLink to="/terms" target="_blank" class="text-blue-500 dark:text-blue-400 hover:underline">Пользовательского соглашения</NuxtLink>
+          и
+          <NuxtLink to="/privacy" target="_blank" class="text-blue-500 dark:text-blue-400 hover:underline">Политики конфиденциальности</NuxtLink>
+        </span>
+      </label>
+
+      <UiButton
+        type="submit"
         variant="primary"
-        :disabled="loading"
+        :disabled="loading || !acceptedTerms"
         full-width
       >
         {{ loading ? 'Регистрация...' : 'Зарегистрироваться' }}
@@ -77,6 +92,7 @@ const username = ref('')
 const email = ref('')
 const password = ref('')
 const password2 = ref('')
+const acceptedTerms = ref(false)
 const loading = ref(false)
 const error = ref('')
 const successMessage = ref('')
@@ -84,6 +100,11 @@ const successMessage = ref('')
 const register = async () => {
   if (!username.value || !email.value || !password.value || !password2.value) {
     error.value = 'Заполните все поля'
+    return
+  }
+
+  if (!acceptedTerms.value) {
+    error.value = 'Необходимо принять условия Пользовательского соглашения и Политики конфиденциальности'
     return
   }
   

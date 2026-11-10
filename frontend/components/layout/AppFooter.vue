@@ -183,6 +183,10 @@
       
       <div class="border-t border-gray-800 mt-6 pt-6 text-center text-sm text-gray-500">
         <p>© {{ new Date().getFullYear() }} Центр Культуры. Все права защищены.</p>
+        <p class="mt-2 flex items-center justify-center gap-4">
+          <NuxtLink to="/privacy" class="hover:text-blue-400 transition">Политика конфиденциальности</NuxtLink>
+          <NuxtLink to="/terms" class="hover:text-blue-400 transition">Пользовательское соглашение</NuxtLink>
+        </p>
       </div>
     </div>
   </footer>
