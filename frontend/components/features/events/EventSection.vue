@@ -1,6 +1,6 @@
 <!-- frontend/components/features/events/EventSection.vue -->
 <template>
-  <section class="py-4">
+  <section ref="rootEl" class="py-4 scroll-mt-20">
     <!-- Заголовок секции -->
     <div class="flex justify-between items-center mb-6">
       <div class="flex items-center gap-3">
@@ -52,15 +52,17 @@
       <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">Следите за обновлениями!</p>
     </div>
     
-    <!-- Сетка карточек -->
-    <div v-else>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
-        <EventCard 
-          v-for="event in currentPageItems" 
-          :key="event.id" 
-          :event="event" 
-        />
-      </div>
+    <!-- Сетка карточек (карусель при пагинации) -->
+    <div v-else class="relative carousel-viewport">
+      <Transition :name="slideName">
+        <div :key="currentPage" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
+          <EventCard
+            v-for="event in currentPageItems"
+            :key="event.id"
+            :event="event"
+          />
+        </div>
+      </Transition>
       
       <!-- Пагинация -->
       <Pagination
@@ -95,6 +97,9 @@ const props = defineProps({
 
 const currentPage = ref(1)
 
+// Направление карусели: вперёд — влево, назад — вправо
+const slideName = ref('slide-left')
+
 const totalItems = computed(() => props.events.length)
 const totalPages = computed(() => {
   return Math.ceil(totalItems.value / props.itemsPerPage)
@@ -106,9 +111,14 @@ const currentPageItems = computed(() => {
   return props.events.slice(start, end)
 })
 
+const rootEl = ref(null)
+
 const onPageChange = (page) => {
   if (page === currentPage.value) return
+  slideName.value = page > currentPage.value ? 'slide-left' : 'slide-right'
   currentPage.value = page
+  // Мягкий скролл к началу списка при смене страницы
+  smoothScrollToElement(rootEl.value)
 }
 
 watch(() => props.events, () => {

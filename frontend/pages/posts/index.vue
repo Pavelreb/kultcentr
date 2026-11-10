@@ -8,9 +8,9 @@
     />
     
     <!-- ========================================== -->
-    <!-- ГЛАВНАЯ ПУБЛИКАЦИЯ                        -->
+    <!-- ГЛАВНАЯ ПУБЛИКАЦИЯ (только на 1-й странице) -->
     <!-- ========================================== -->
-    <FeaturedPost :post="featuredPost" />
+    <FeaturedPost v-if="isFirstPage" :post="featuredPost" />
     
     <!-- ========================================== -->
     <!-- СПИСОК ВСЕХ ПУБЛИКАЦИЙ (с пагинацией)    -->
@@ -34,8 +34,12 @@ const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
 const { apiFetch } = useApi()
+const route = useRoute()
 const posts = ref([])
 const loading = ref(true)
+
+// Главную новость показываем только на первой странице пагинации
+const isFirstPage = computed(() => (Number(route.query.page) || 1) === 1)
 
 // Хлебные крошки — на странице публикаций последняя крошка "Публикации"
 const breadcrumbItems = [

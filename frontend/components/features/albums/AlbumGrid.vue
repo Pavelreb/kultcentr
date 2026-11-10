@@ -1,6 +1,6 @@
 <!-- frontend/components/features/albums/AlbumGrid.vue -->
 <template>
-  <div>
+  <div ref="rootEl" class="scroll-mt-20">
     <!-- Заголовок списка -->
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
@@ -75,7 +75,11 @@ const props = defineProps({
   }
 })
 
-const currentPage = ref(1)
+const route = useRoute()
+const router = useRouter()
+
+// Номер страницы живёт в URL (?page=N): переживает «назад» и F5
+const currentPage = ref(Number(route.query.page) || 1)
 
 const totalItems = computed(() => props.albums.length)
 const totalPages = computed(() => {
@@ -88,12 +92,32 @@ const currentPageItems = computed(() => {
   return props.albums.slice(start, end)
 })
 
+const rootEl = ref(null)
+
 const onPageChange = (page) => {
   if (page === currentPage.value) return
   currentPage.value = page
+  router.replace({ query: { ...route.query, page: String(page) } })
+  // Скролл — в watch на route.query.page ниже: он сработает после перерисовки DOM
 }
 
+// Реагируем на кнопки браузера «вперёд/назад» и на смену страницы:
+// flush: 'post' — скроллим ПОСЛЕ перерисовки DOM
+watch(() => route.query.page, (newPage) => {
+  const page = Number(newPage) || 1
+  if (page !== currentPage.value) {
+    currentPage.value = page
+  }
+  smoothScrollToElement(rootEl.value)
+}, { flush: 'post' })
+
+let initialLoad = true
 watch(() => props.albums, () => {
+  if (initialLoad) {
+    initialLoad = false
+    return
+  }
   currentPage.value = 1
+  router.replace({ query: { ...route.query, page: '1' } })
 }, { deep: true })
 </script>

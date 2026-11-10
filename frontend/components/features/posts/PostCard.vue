@@ -50,11 +50,11 @@
     <!-- Контент -->
     <div class="p-4 flex flex-col flex-1">
       <div class="flex-1">
-        <h3 class="text-base font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+        <h3 class="text-base font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 min-h-12">
           {{ post.title }}
         </h3>
-        
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1.5 line-clamp-3">
+
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1.5 line-clamp-3 min-h-[60px]">
           {{ post.excerpt || post.content?.substring(0, 100) }}...
         </p>
       </div>
