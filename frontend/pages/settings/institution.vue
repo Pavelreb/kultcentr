@@ -265,6 +265,7 @@ const updateInfo = async () => {
       bgRemoved.value = false
       success.value = 'Информация об учреждении сохранена!'
       setTimeout(() => { success.value = '' }, 3000)
+      window.dispatchEvent(new Event('institution-updated'))
     } else {
       const data = await res.json().catch(() => ({}))
       error.value = data.detail || 'Ошибка сохранения'

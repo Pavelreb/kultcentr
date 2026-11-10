@@ -1,7 +1,7 @@
 # backend/about/serializers.py
 
 from rest_framework import serializers
-from .models import InstitutionInfo, StaffMember, Club, Achievement
+from .models import InstitutionInfo, StaffMember, Club, Achievement, Document
 
 
 class InstitutionInfoSerializer(serializers.ModelSerializer):
@@ -142,3 +142,52 @@ class AchievementSerializer(serializers.ModelSerializer):
                 return request.build_absolute_uri(obj.image.url)
             return obj.image.url
         return obj.image_url
+
+
+class DocumentSerializer(serializers.ModelSerializer):
+    file_display = serializers.SerializerMethodField()
+    file_ext = serializers.SerializerMethodField()
+    file_size = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Document
+        fields = [
+            "id",
+            "title",
+            "description",
+            "file",
+            "file_url",
+            "file_display",
+            "file_ext",
+            "file_size",
+            "order",
+            "is_published",
+            "created_at",
+        ]
+        read_only_fields = ["id", "created_at"]
+
+    def get_file_display(self, obj):
+        if obj.file:
+            request = self.context.get("request")
+            if request:
+                return request.build_absolute_uri(obj.file.url)
+            return obj.file.url
+        return obj.file_url
+
+    def get_file_ext(self, obj):
+        name = ""
+        if obj.file:
+            name = obj.file.name
+        elif obj.file_url:
+            name = obj.file_url.split("?")[0]
+        if "." in name:
+            return name.rsplit(".", 1)[-1].lower()
+        return ""
+
+    def get_file_size(self, obj):
+        if obj.file:
+            try:
+                return obj.file.size
+            except Exception:
+                return None
+        return None

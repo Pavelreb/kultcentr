@@ -125,6 +125,39 @@
           <AchievementCard v-for="a in achievements.slice(0, 6)" :key="a.id" :achievement="a" />
         </div>
       </section>
+
+      <!-- Документы -->
+      <section class="mt-12">
+        <div class="flex items-center justify-between mb-5">
+          <NuxtLink to="/about/documents" class="group">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+              <svg class="w-7 h-7 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              Документы
+            </h2>
+          </NuxtLink>
+          <NuxtLink
+            v-if="documents.length > 0"
+            to="/about/documents"
+            class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition"
+          >
+            Все документы
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </NuxtLink>
+        </div>
+        <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div v-for="n in 3" :key="n" class="bg-white dark:bg-gray-800 rounded-xl shadow-md h-16 animate-pulse"></div>
+        </div>
+        <div v-else-if="documents.length === 0" class="text-center py-8 bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-sm">
+          Документы скоро появятся
+        </div>
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <DocumentCard v-for="d in documents.slice(0, 6)" :key="d.id" :doc="d" />
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -133,10 +166,11 @@
 import StaffCard from '~/components/features/about/StaffCard.vue'
 import ClubCard from '~/components/features/about/ClubCard.vue'
 import AchievementCard from '~/components/features/about/AchievementCard.vue'
+import DocumentCard from '~/components/features/about/DocumentCard.vue'
 
 useSeoMeta({
   title: 'Об учреждении',
-  description: 'Общая информация, сотрудники, клубные формирования и достижения Центра Культуры.'
+  description: 'Общая информация, сотрудники, клубные формирования, достижения и документы Центра Культуры.'
 })
 
 const config = useRuntimeConfig()
@@ -147,20 +181,23 @@ const info = ref(null)
 const staff = ref([])
 const clubs = ref([])
 const achievements = ref([])
+const documents = ref([])
 const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const [infoRes, staffRes, clubsRes, achRes] = await Promise.all([
+    const [infoRes, staffRes, clubsRes, achRes, docsRes] = await Promise.all([
       apiFetch(`${API_URL}/about/info/`),
       apiFetch(`${API_URL}/about/staff/`),
       apiFetch(`${API_URL}/about/clubs/`),
-      apiFetch(`${API_URL}/about/achievements/`)
+      apiFetch(`${API_URL}/about/achievements/`),
+      apiFetch(`${API_URL}/about/documents/`)
     ])
     if (infoRes.ok) info.value = await infoRes.json()
     if (staffRes.ok) staff.value = await staffRes.json()
     if (clubsRes.ok) clubs.value = await clubsRes.json()
     if (achRes.ok) achievements.value = await achRes.json()
+    if (docsRes.ok) documents.value = await docsRes.json()
   } catch (e) {
     console.error('Ошибка загрузки:', e)
   } finally {

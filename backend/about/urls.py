@@ -6,12 +6,14 @@ from .views import (
     StaffMemberViewSet,
     ClubViewSet,
     AchievementViewSet,
+    DocumentViewSet,
 )
 
 router = DefaultRouter()
 router.register("staff", StaffMemberViewSet, basename="staff")
 router.register("clubs", ClubViewSet, basename="clubs")
 router.register("achievements", AchievementViewSet, basename="achievements")
+router.register("documents", DocumentViewSet, basename="documents")
 
 urlpatterns = [
     path("info/", InstitutionInfoView.as_view(), name="institution_info"),
