@@ -33,6 +33,17 @@ const { apiFetch } = useApi()
 const event = ref(null)
 const loading = ref(true)
 
+// Заголовок и описание страницы — из данных события
+useHead(() => ({
+  title: event.value?.title || 'Событие',
+  meta: [
+    {
+      name: 'description',
+      content: event.value?.excerpt || event.value?.content?.substring(0, 160) || 'Мероприятие центра культуры'
+    }
+  ]
+}))
+
 // Хлебные крошки: Афиша → Название события
 const breadcrumbItems = [
   { label: 'Афиша', to: '/events' }

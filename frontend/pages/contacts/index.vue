@@ -153,6 +153,11 @@
 <script setup>
 import { useAuthStore } from '~/store/auth'
 
+useSeoMeta({
+  title: 'Контакты',
+  description: 'Контакты центра культуры: адрес, телефон, время работы.'
+})
+
 const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 

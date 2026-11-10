@@ -55,6 +55,13 @@
 <script setup>
 import { useAuthStore } from '~/store/auth'
 import HeroBanner from '~/components/features/banner/HeroBanner.vue'
+
+useSeoMeta({
+  title: 'Главная',
+  description: 'Афиша мероприятий, публикации, фотоальбомы и авторы центра культуры.',
+  ogTitle: 'Центр Культуры',
+  ogDescription: 'Афиша мероприятий, публикации, фотоальбомы и авторы центра культуры.'
+})
 import EventSection from '~/components/features/events/EventSection.vue'
 import PostSection from '~/components/features/posts/PostSection.vue'
 import AuthorSection from '~/components/features/authors/AuthorSection.vue'
