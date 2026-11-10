@@ -16,4 +16,12 @@
 <script setup>
 import AppHeader from '~/components/layout/AppHeader.vue'
 import AppFooter from '~/components/layout/AppFooter.vue'
+import { useThemeStore } from '~/store/theme'
+
+const themeStore = useThemeStore()
+
+// Восстанавливаем тему из localStorage при каждой загрузке приложения
+onMounted(() => {
+  themeStore.loadTheme()
+})
 </script>
