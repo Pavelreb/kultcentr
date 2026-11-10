@@ -79,6 +79,11 @@
 <script setup>
 import { useAuthStore } from '~/store/auth'
 import UiButton from '~/components/ui/UiButton.vue'
+
+useSeoMeta({
+  title: 'Вход',
+  description: 'Вход в аккаунт центра культуры.'
+})
 import UiInput from '~/components/ui/UiInput.vue'
 
 const config = useRuntimeConfig()

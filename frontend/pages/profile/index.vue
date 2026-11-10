@@ -372,6 +372,10 @@
 <script setup>
 import { useAuthStore } from '~/store/auth'
 
+useSeoMeta({
+  title: 'Мой профиль'
+})
+
 definePageMeta({
   middleware: 'auth'
 })

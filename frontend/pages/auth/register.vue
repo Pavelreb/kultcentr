@@ -60,6 +60,11 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+
+useSeoMeta({
+  title: 'Регистрация',
+  description: 'Регистрация на сайте центра культуры.'
+})
 import UiButton from '~/components/ui/UiButton.vue'
 import UiInput from '~/components/ui/UiInput.vue'
 

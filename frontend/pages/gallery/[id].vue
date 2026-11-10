@@ -33,6 +33,17 @@ const { apiFetch } = useApi()
 const album = ref(null)
 const loading = ref(true)
 
+// Заголовок и описание страницы — из данных альбома
+useHead(() => ({
+  title: album.value?.title || 'Фотоальбом',
+  meta: [
+    {
+      name: 'description',
+      content: album.value?.description || 'Фотоальбом центра культуры'
+    }
+  ]
+}))
+
 // Хлебные крошки
 const breadcrumbItems = [
   { label: 'Фотоальбомы', to: '/gallery' }

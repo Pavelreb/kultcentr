@@ -25,6 +25,11 @@
 <script setup>
 import { useAuthStore } from '~/store/auth'
 import Breadcrumbs from '~/components/common/Breadcrumbs.vue'
+
+useSeoMeta({
+  title: 'Афиша',
+  description: 'Афиша мероприятий центра культуры: концерты, спектакли, выставки, мастер-классы.'
+})
 import FeaturedEvent from '~/components/features/events/FeaturedEvent.vue'
 import EventList from '~/components/features/events/EventList.vue'
 

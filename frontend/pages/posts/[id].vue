@@ -33,6 +33,17 @@ const { apiFetch } = useApi()
 const post = ref(null)
 const loading = ref(true)
 
+// Заголовок и описание страницы — из данных поста
+useHead(() => ({
+  title: post.value?.title || 'Публикация',
+  meta: [
+    {
+      name: 'description',
+      content: post.value?.excerpt || post.value?.content?.substring(0, 160) || 'Публикация центра культуры'
+    }
+  ]
+}))
+
 // Хлебные крошки
 const breadcrumbItems = [
   { label: 'Публикации', to: '/posts' }

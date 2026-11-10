@@ -26,6 +26,11 @@
 <script setup>
 import { useAuthStore } from '~/store/auth'
 import Breadcrumbs from '~/components/common/Breadcrumbs.vue'
+
+useSeoMeta({
+  title: 'Публикации',
+  description: 'Новости, статьи и публикации центра культуры.'
+})
 import FeaturedPost from '~/components/features/posts/FeaturedPost.vue'
 import PostList from '~/components/features/posts/PostList.vue'
 

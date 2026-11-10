@@ -19,6 +19,11 @@
 <script setup>
 import { useAuthStore } from '~/store/auth'
 import Breadcrumbs from '~/components/common/Breadcrumbs.vue'
+
+useSeoMeta({
+  title: 'Фотогалерея',
+  description: 'Фотоальбомы с мероприятий центра культуры.'
+})
 import AlbumGrid from '~/components/features/albums/AlbumGrid.vue'
 
 const config = useRuntimeConfig()

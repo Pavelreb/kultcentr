@@ -118,6 +118,11 @@
 
 <script setup>
 const config = useRuntimeConfig()
+
+useSeoMeta({
+  title: 'Авторы',
+  description: 'Авторы и редакция центра культуры.'
+})
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authors = ref([])
