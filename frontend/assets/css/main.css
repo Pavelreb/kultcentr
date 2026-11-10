@@ -13,3 +13,44 @@
         @apply bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition;
     }
 }
+
+/* ============================================ */
+/* Карусель-анимация пагинации (только главная) */
+/* Весь ряд уезжает за край, новый въезжает     */
+/* с противоположной стороны одновременно       */
+/* ============================================ */
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+    transition: transform 0.5s ease;
+}
+
+/* Уезжающий ряд поверх нового, не влияет на высоту */
+.slide-left-leave-active,
+.slide-right-leave-active {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+}
+
+/* Вперёд: старые за левый край, новые из-за правого */
+.slide-left-enter-from {
+    transform: translateX(100%);
+}
+.slide-left-leave-to {
+    transform: translateX(-100%);
+}
+
+/* Назад: наоборот */
+.slide-right-enter-from {
+    transform: translateX(-100%);
+}
+.slide-right-leave-to {
+    transform: translateX(100%);
+}
+
+/* Вьюпорт карусели: не даём въезжающему ряду растягивать страницу */
+.carousel-viewport {
+    overflow-x: clip;
+}

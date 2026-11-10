@@ -153,14 +153,17 @@
       </div>
     </div>
     
-    <!-- Навигация: Назад к списку -->
+    <!-- Навигация: Назад -->
     <div class="mt-6 px-4">
-      <NuxtLink to="/gallery" class="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition">
+      <button
+        @click="goBack"
+        class="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition"
+      >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>
-        Назад к альбомам
-      </NuxtLink>
+        Назад
+      </button>
     </div>
     
     <!-- Lightbox -->
@@ -219,6 +222,16 @@ const props = defineProps({
 const emit = defineEmits(['delete'])
 
 const router = useRouter()
+
+// Возврат туда, откуда пришёл пользователь (сохраняет страницу пагинации и скролл).
+// Если зашёл по прямой ссылке (истории нет) — ведём в галерею.
+const goBack = () => {
+  if (window.history.state?.back) {
+    router.back()
+  } else {
+    router.push('/gallery')
+  }
+}
 const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 

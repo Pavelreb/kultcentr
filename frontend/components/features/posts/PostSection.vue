@@ -1,6 +1,6 @@
 <!-- frontend/components/features/posts/PostSection.vue -->
 <template>
-  <section class="py-4">
+  <section ref="rootEl" class="py-4 scroll-mt-20">
     <!-- Заголовок секции -->
     <div class="flex justify-between items-center mb-6">
       <div class="flex items-center gap-3">
@@ -52,16 +52,18 @@
       <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">Следите за обновлениями!</p>
     </div>
     
-    <!-- Сетка карточек -->
-    <div v-else>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-        <PostCard 
-          v-for="post in currentPageItems" 
-          :key="post.id" 
-          :post="post"
-          :show-draft-badge="showDraftBadge"
-        />
-      </div>
+    <!-- Сетка карточек (карусель при пагинации) -->
+    <div v-else class="relative carousel-viewport">
+      <Transition :name="slideName">
+        <div :key="currentPage" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+          <PostCard
+            v-for="post in currentPageItems"
+            :key="post.id"
+            :post="post"
+            :show-draft-badge="showDraftBadge"
+          />
+        </div>
+      </Transition>
       
       <!-- Пагинация -->
       <Pagination
@@ -100,6 +102,9 @@ const props = defineProps({
 
 const currentPage = ref(1)
 
+// Направление карусели: вперёд — влево, назад — вправо
+const slideName = ref('slide-left')
+
 // Только опубликованные посты
 const publishedPosts = computed(() => {
   return props.posts.filter(p => p.is_published)
@@ -116,9 +121,14 @@ const currentPageItems = computed(() => {
   return publishedPosts.value.slice(start, end)
 })
 
+const rootEl = ref(null)
+
 const onPageChange = (page) => {
   if (page === currentPage.value) return
+  slideName.value = page > currentPage.value ? 'slide-left' : 'slide-right'
   currentPage.value = page
+  // Мягкий скролл к началу списка при смене страницы
+  smoothScrollToElement(rootEl.value)
 }
 
 watch(() => props.posts, () => {
