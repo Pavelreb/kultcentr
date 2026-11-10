@@ -376,6 +376,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 const router = useRouter()
 
 // ============================================
@@ -491,10 +492,7 @@ const formatDateTime = (dateString) => {
 // ============================================
 const loadProfile = async () => {
   try {
-    const res = await fetch(`${API_URL}/auth/users/me/`, {
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
+    const res = await apiFetch(`${API_URL}/auth/users/me/`, {
     })
     
     if (res.ok) {
@@ -527,10 +525,7 @@ const loadProfile = async () => {
 
 const loadUserPosts = async () => {
   try {
-    const res = await fetch(`${API_URL}/posts/my_posts/`, {
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
+    const res = await apiFetch(`${API_URL}/posts/my_posts/`, {
     })
     
     if (res.ok) {
@@ -545,10 +540,7 @@ const loadUserPosts = async () => {
 
 const loadUserEvents = async () => {
   try {
-    const res = await fetch(`${API_URL}/events/my_events/`, {
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
+    const res = await apiFetch(`${API_URL}/events/my_events/`, {
     })
     
     if (res.ok) {
@@ -566,10 +558,7 @@ const loadUserComments = async () => {
     let comments = []
     
     try {
-      const postCommentsRes = await fetch(`${API_URL}/comments/my_comments/`, {
-        headers: {
-          'Authorization': `Bearer ${authStore.accessToken}`
-        }
+      const postCommentsRes = await apiFetch(`${API_URL}/comments/my_comments/`, {
       })
       
       if (postCommentsRes.ok) {
@@ -581,10 +570,7 @@ const loadUserComments = async () => {
     }
     
     try {
-      const photoCommentsRes = await fetch(`${API_URL}/photo-comments/my_comments/`, {
-        headers: {
-          'Authorization': `Bearer ${authStore.accessToken}`
-        }
+      const photoCommentsRes = await apiFetch(`${API_URL}/photo-comments/my_comments/`, {
       })
       
       if (photoCommentsRes.ok) {

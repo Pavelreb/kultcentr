@@ -64,6 +64,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 
 // ============================================
 // 1. БАННЕР
@@ -133,11 +134,7 @@ const loadBanner = async () => {
 
 const loadEvents = async () => {
   try {
-    const headers = {}
-    if (authStore.isAuthenticated) {
-      headers['Authorization'] = `Bearer ${authStore.accessToken}`
-    }
-    const res = await fetch(`${API_URL}/events/`, { headers })
+    const res = await apiFetch('/events/')
     if (res.ok) {
       events.value = await res.json()
     } else {
@@ -154,11 +151,7 @@ const loadEvents = async () => {
 
 const loadPosts = async () => {
   try {
-    const headers = {}
-    if (authStore.isAuthenticated) {
-      headers['Authorization'] = `Bearer ${authStore.accessToken}`
-    }
-    const res = await fetch(`${API_URL}/posts/`, { headers })
+    const res = await apiFetch('/posts/')
     if (res.ok) {
       posts.value = await res.json()
     } else {
@@ -192,11 +185,7 @@ const loadAuthors = async () => {
 
 const loadAlbums = async () => {
   try {
-    const headers = {}
-    if (authStore.isAuthenticated) {
-      headers['Authorization'] = `Bearer ${authStore.accessToken}`
-    }
-    const res = await fetch(`${API_URL}/albums/`, { headers })
+    const res = await apiFetch('/albums/')
     if (res.ok) {
       albums.value = await res.json()
     } else {

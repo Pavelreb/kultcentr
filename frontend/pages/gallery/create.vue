@@ -248,6 +248,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 const router = useRouter()
 
 const submitting = ref(false)
@@ -371,11 +372,8 @@ const createAlbum = async () => {
       formData.append('cover_image_url', coverUrl.value)
     }
     
-    const res = await fetch(`${API_URL}/albums/`, {
+    const res = await apiFetch(`${API_URL}/albums/`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      },
       body: formData
     })
     
@@ -395,11 +393,8 @@ const createAlbum = async () => {
         uploadFormData.append('photos', item.file)
       }
       
-      const uploadRes = await fetch(`${API_URL}/albums/${album.id}/upload-photos/`, {
+      const uploadRes = await apiFetch(`${API_URL}/albums/${album.id}/upload-photos/`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authStore.accessToken}`
-        },
         body: uploadFormData
       })
       

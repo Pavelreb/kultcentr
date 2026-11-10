@@ -324,6 +324,7 @@ const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const route = useRoute()
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 const router = useRouter()
 
 const albumId = computed(() => {
@@ -433,11 +434,8 @@ const deleteExistingPhoto = async (photoId) => {
   if (!confirm('Удалить эту фотографию?')) return
 
   try {
-    const res = await fetch(`${API_URL}/albums/${albumId.value}/photos/${photoId}/`, {
+    const res = await apiFetch(`${API_URL}/albums/${albumId.value}/photos/${photoId}/`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
     })
 
     if (res.ok) {
@@ -460,10 +458,7 @@ onBeforeUnmount(() => {
 // Загрузка данных альбома
 onMounted(async () => {
   try {
-    const res = await fetch(`${API_URL}/albums/${albumId.value}/`, {
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
+    const res = await apiFetch(`${API_URL}/albums/${albumId.value}/`, {
     })
 
     if (res.ok) {
@@ -519,11 +514,8 @@ const updateAlbum = async () => {
       formData.append('cover_image_url', form.value.cover_image_url)
     }
 
-    const res = await fetch(`${API_URL}/albums/${albumId.value}/`, {
+    const res = await apiFetch(`${API_URL}/albums/${albumId.value}/`, {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      },
       body: formData
     })
 
@@ -542,11 +534,8 @@ const updateAlbum = async () => {
         uploadFormData.append('photos', item.file)
       }
 
-      await fetch(`${API_URL}/albums/${albumId.value}/upload-photos/`, {
+      await apiFetch(`${API_URL}/albums/${albumId.value}/upload-photos/`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authStore.accessToken}`
-        },
         body: uploadFormData
       })
     }
@@ -566,11 +555,8 @@ const deleteAlbum = async () => {
   if (!confirm(`Вы уверены, что хотите удалить альбом "${form.value.title}"?`)) return
 
   try {
-    const res = await fetch(`${API_URL}/albums/${albumId.value}/`, {
+    const res = await apiFetch(`${API_URL}/albums/${albumId.value}/`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
     })
 
     if (res.ok) {

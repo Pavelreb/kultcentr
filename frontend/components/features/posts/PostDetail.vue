@@ -199,6 +199,7 @@ import { useAuthStore } from '~/store/auth'
 import PostComments from '~/components/features/posts/PostComments.vue'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 
 const props = defineProps({
   post: {
@@ -274,11 +275,10 @@ const toggleLike = async () => {
   isLiking.value = true
   
   try {
-    const res = await fetch(`${config.public.apiBase}/likes/`, {
+    const res = await apiFetch(`${config.public.apiBase}/likes/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         post: props.post.id

@@ -323,6 +323,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 
 // ============================================
 // АКТИВНАЯ ВКЛАДКА
@@ -463,11 +464,8 @@ const applyDefaultBannerSettings = async () => {
     formData.append('is_active', DEFAULT_BANNER.is_active ? 'true' : 'false')
     formData.append('background_image_url', '')
     
-    const res = await fetch(`${API_URL}/banner/update/`, {
+    const res = await apiFetch(`${API_URL}/banner/update/`, {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      },
       body: formData
     })
     
@@ -512,7 +510,7 @@ const applyDefaultBannerSettings = async () => {
 // ============================================
 const loadBanner = async () => {
   try {
-    const res = await fetch(`${API_URL}/banner/`)
+    const res = await apiFetch(`${API_URL}/banner/`)
     if (res.ok) {
       const data = await res.json()
       bannerForm.value = {
@@ -565,11 +563,8 @@ const updateBanner = async () => {
       formData.append('background_image_url', bannerForm.value.background_image_url_display)
     }
     
-    const res = await fetch(`${API_URL}/banner/update/`, {
+    const res = await apiFetch(`${API_URL}/banner/update/`, {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      },
       body: formData
     })
     

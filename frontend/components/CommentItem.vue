@@ -133,6 +133,7 @@
 import { useAuthStore } from '~/store/auth'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 
 const props = defineProps({
   comment: {
@@ -236,11 +237,10 @@ const toggleLike = async () => {
   }
   
   try {
-    const res = await fetch(`${API_URL}/likes/`, {
+    const res = await apiFetch(`${API_URL}/likes/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         comment: props.comment.id

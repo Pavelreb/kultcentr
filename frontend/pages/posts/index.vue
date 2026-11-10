@@ -33,6 +33,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 const posts = ref([])
 const loading = ref(true)
 
@@ -64,11 +65,7 @@ onMounted(() => {
 
 onMounted(async () => {
   try {
-    const headers = {}
-    if (authStore.isAuthenticated) {
-      headers['Authorization'] = `Bearer ${authStore.accessToken}`
-    }
-    const res = await fetch(`${API_URL}/posts/`, { headers })
+    const res = await apiFetch(`${API_URL}/posts/`)
     posts.value = await res.json()
   } catch (e) {
     console.error('Ошибка:', e)

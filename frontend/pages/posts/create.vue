@@ -210,6 +210,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 const router = useRouter()
 
 const submitting = ref(false)
@@ -277,11 +278,8 @@ const createPost = async () => {
       const formData = new FormData()
       formData.append('image', imageFile.value)
       
-      const uploadRes = await fetch(`${API_URL}/posts/upload-image/`, {
+      const uploadRes = await apiFetch(`${API_URL}/posts/upload-image/`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authStore.accessToken}`
-        },
         body: formData
       })
       
@@ -298,11 +296,10 @@ const createPost = async () => {
       finalImageUrl = imageUrl.value
     }
     
-    const res = await fetch(`${API_URL}/posts/`, {
+    const res = await apiFetch(`${API_URL}/posts/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         title: title.value,

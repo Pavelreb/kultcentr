@@ -237,6 +237,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 
 const newComment = ref('')
 const submitting = ref(false)
@@ -294,11 +295,10 @@ const submitComment = async () => {
       body.parent = replyToId.value
     }
     
-    const res = await fetch(`${API_URL}/albums/${props.albumId}/photos/${props.photoId}/comment/`, {
+    const res = await apiFetch(`${API_URL}/albums/${props.albumId}/photos/${props.photoId}/comment/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     })
