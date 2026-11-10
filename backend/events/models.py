@@ -35,6 +35,8 @@ class Event(models.Model):
     is_published = models.BooleanField(default=False, verbose_name="Опубликовано")
     excerpt = models.TextField(blank=True, null=True, verbose_name="Краткое описание")
 
+    is_featured = models.BooleanField(default=False, verbose_name="Главная афиша")
+
     def delete_image_file(self):
         """Удаляет файл изображения с диска"""
         if self.image:

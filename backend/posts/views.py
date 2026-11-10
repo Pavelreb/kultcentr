@@ -169,6 +169,37 @@ class PostViewSet(viewsets.ModelViewSet):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=True, methods=["post"], url_path="feature")
+    def feature(self, request, pk=None):
+        """Назначить пост главной публикацией (только редактор)"""
+        user = request.user
+        if not user.is_authenticated or user.role != "editor":
+            return Response({"detail": "Недостаточно прав"}, status=403)
+
+        post = get_object_or_404(Post, pk=pk)
+        if not post.is_published:
+            return Response(
+                {"detail": "Главной может быть только опубликованная публикация"},
+                status=400,
+            )
+
+        Post.objects.filter(is_featured=True).exclude(pk=post.pk).update(
+            is_featured=False
+        )
+        post.is_featured = True
+        post.save(update_fields=["is_featured"])
+        return Response(self.get_serializer(post).data)
+
+    @action(detail=False, methods=["post"], url_path="unfeature")
+    def unfeature(self, request):
+        """Сбросить главную публикацию — выбор станет автоматическим"""
+        user = request.user
+        if not user.is_authenticated or user.role != "editor":
+            return Response({"detail": "Недостаточно прав"}, status=403)
+
+        Post.objects.filter(is_featured=True).update(is_featured=False)
+        return Response({"detail": "Главная публикация сброшена"})
+
     @action(detail=False, methods=["get"], url_path="my_posts")
     def my_posts(self, request):
         user = request.user

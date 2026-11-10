@@ -20,6 +20,54 @@
           <p class="text-sm text-gray-400 leading-relaxed whitespace-pre-wrap">
             {{ contacts.description }}
           </p>
+
+          <!-- Социальные сети -->
+          <div v-if="contacts.vk || contacts.max || contacts.ok || contacts.rutube" class="social-links flex gap-3 mt-4">
+            <a
+              v-if="contacts.vk"
+              :href="contacts.vk"
+              target="_blank"
+              class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg"
+              title="ВКонтакте"
+            >
+              <svg class="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.949 2.059-1.604 1.488 1.488 1.796 2.519 3.603 2.519h3.2c.808 0 1.126-.26 1.126-.668 0-.863-1.421-2.386-2.625-3.504-1.686-1.565-1.765-1.602-.313-3.486 1.507-1.949 2.505-3.995 1.628-4.147-.244-.04-1.183-.05-2.303.018-.079.008-.146.03-.206.066-.128.075-.252.17-.389.291-1.158 1.039-2.208 2.313-2.562 2.486-.105.052-.18.063-.259.045-.142-.034-.338-.212-.354-.944-.028-1.258-.341-2.021-.946-2.384-.283-.17-.494-.262-1.371-.252-.674.007-1.172.055-1.613.336-.24.153-.383.367-.565.763-.07.153-.146.354-.226.617-.242.788-.483 1.574-1.037 2.287-.335.431-.748.899-1.155 1.331-.133.143-.255.273-.38.399-.425.428-.729.459-.915.445-.389-.029-.786-.044-1.054-.11-.703-.174-1.004-.854-1.08-1.398-.037-.265-.117-.712-.132-.997-.034-.663-.172-1.164-.628-1.455-.273-.174-.655-.249-1.273-.252-.816-.004-1.337.161-1.582.611-.21.386-.091.979.009 1.279.067.201.186.436.315.685.344.664.736 1.421 1.248 2.134.87 1.213 1.62 2.116 2.546 3.087.886.93 1.751 1.487 2.713 1.805.449.149.761.205 1.141.21z"/>
+              </svg>
+            </a>
+            <a
+              v-if="contacts.max"
+              :href="contacts.max"
+              target="_blank"
+              class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg"
+              title="MAX"
+            >
+              <svg class="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.02 2 11c0 2.4 1.05 4.6 2.77 6.27-.13.86-.65 2.47-1.65 3.73 1.4-.08 3.13-.68 4.16-1.22.86.25 1.78.39 2.72.39 5.52 0 10-4.02 10-8.97S17.52 2 12 2zm-4.5 9.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm4.5 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm4.5 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+              </svg>
+            </a>
+            <a
+              v-if="contacts.ok"
+              :href="contacts.ok"
+              target="_blank"
+              class="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg"
+              title="Одноклассники"
+            >
+              <svg class="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2a5 5 0 00-5 5c0 2.76 2.24 5 5 5s5-2.24 5-5a5 5 0 00-5-5zm0 8a3 3 0 110-6 3 3 0 010 6zm5.83 3.42a1.25 1.25 0 00-1.77-.15c-1.1.94-2.55 1.5-4.06 1.5s-2.96-.56-4.06-1.5a1.25 1.25 0 10-1.62 1.9c1.28 1.1 2.87 1.76 4.55 1.93l-2.6 3.9a1.25 1.25 0 102.06 1.4L12 19.66l1.67 2.51a1.25 1.25 0 102.06-1.4l-2.6-3.9c1.68-.17 3.27-.83 4.55-1.93.5-.42.56-1.17.15-1.62z"/>
+              </svg>
+            </a>
+            <a
+              v-if="contacts.rutube"
+              :href="contacts.rutube"
+              target="_blank"
+              class="w-9 h-9 rounded-full bg-gray-900 border border-gray-700 flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg"
+              title="RuTube"
+            >
+              <svg class="w-[18px] h-[18px]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+              </svg>
+            </a>
+          </div>
         </div>
         
         <!-- Центральная колонка: Контакты -->
@@ -189,6 +237,11 @@ onUnmounted(() => {
 
 .app-footer a:hover {
   color: #60a5fa !important;
+}
+
+.app-footer .social-links a,
+.app-footer .social-links a:hover {
+  color: #ffffff !important;
 }
 
 :where(.dark) .app-footer {

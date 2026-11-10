@@ -20,9 +20,10 @@ class ContactInfo(models.Model):
         default="Место, где искусство, традиции и творчество объединяются.\nМы создаём пространство для культурного развития и вдохновения.",
         verbose_name="Описание",
     )
-    instagram = models.URLField(blank=True, null=True, verbose_name="Instagram")
     vk = models.URLField(blank=True, null=True, verbose_name="ВКонтакте")
-    telegram = models.URLField(blank=True, null=True, verbose_name="Telegram")
+    max = models.URLField(blank=True, null=True, verbose_name="MAX")
+    ok = models.URLField(blank=True, null=True, verbose_name="Одноклассники")
+    rutube = models.URLField(blank=True, null=True, verbose_name="RuTube")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
 
     def __str__(self):
