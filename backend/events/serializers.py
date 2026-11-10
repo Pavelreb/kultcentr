@@ -3,6 +3,7 @@ from .models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
+    author_id = serializers.ReadOnlyField(source="author.id")
     author_name = serializers.CharField(source="author.username", read_only=True)
     author_role = serializers.CharField(source="author.role", read_only=True)
     display_image = serializers.SerializerMethodField()
@@ -13,6 +14,7 @@ class EventSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "content",
+            "author_id",
             "author_name",
             "author_role",
             "event_date",

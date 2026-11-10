@@ -37,7 +37,10 @@
       </h2>
       
       <!-- Автор с аватаркой -->
-      <div class="flex items-center gap-2 mt-2 text-sm text-gray-500 dark:text-gray-400">
+      <div
+        class="flex items-center gap-2 mt-2 text-sm text-gray-500 dark:text-gray-400 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors self-start"
+        @click.prevent.stop="goToAuthor"
+      >
         <img 
           v-if="post.author_avatar" 
           :src="post.author_avatar" 
@@ -113,6 +116,13 @@ const getAuthorFullName = () => {
     return props.post.author_full_name
   }
   return props.post.author_name || 'Автор'
+}
+
+// Переход на страницу автора (карточка целиком — ссылка, поэтому стопорим всплытие)
+const goToAuthor = () => {
+  if (props.post.author_id) {
+    navigateTo(`/users/${props.post.author_id}`)
+  }
 }
 
 const getInitials = (name) => {

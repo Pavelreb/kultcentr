@@ -63,7 +63,10 @@
       <div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
         <!-- Автор -->
         <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-          <div class="flex items-center gap-1.5">
+          <div
+            class="flex items-center gap-1.5 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            @click.prevent.stop="goToAuthor"
+          >
             <img 
               v-if="post.author_avatar" 
               :src="post.author_avatar" 
@@ -76,7 +79,7 @@
             >
               {{ getInitials(post.author_name) }}
             </div>
-            <span class="font-medium text-gray-700 dark:text-gray-300">
+            <span class="font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
               {{ getAuthorFullName(post) }}
             </span>
           </div>
@@ -152,6 +155,13 @@ const getAuthorFullName = (post) => {
     return post.author_full_name
   }
   return post.author_name || post.author?.username || 'Автор'
+}
+
+// Переход на страницу автора (карточка целиком — ссылка, поэтому стопорим всплытие)
+const goToAuthor = () => {
+  if (props.post.author_id) {
+    navigateTo(`/users/${props.post.author_id}`)
+  }
 }
 
 // Проверяем, создан ли пост сегодня

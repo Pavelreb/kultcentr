@@ -69,7 +69,33 @@
         
         <!-- Автор и дата -->
         <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-6 pb-6 border-b border-gray-100 dark:border-gray-700">
-          <div class="flex items-center gap-2">
+          <NuxtLink
+            v-if="post.author_id"
+            :to="`/users/${post.author_id}`"
+            class="flex items-center gap-2 hover:opacity-80 transition"
+          >
+            <img 
+              v-if="post.author_avatar" 
+              :src="post.author_avatar" 
+              :alt="post.author_name"
+              class="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-600"
+            >
+            <div 
+              v-else
+              class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+            >
+              {{ getInitials(getAuthorFullName()) }}
+            </div>
+            <div class="flex flex-col">
+              <span class="font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                {{ getAuthorFullName() }}
+              </span>
+              <span class="text-xs text-gray-400 dark:text-gray-500">
+                {{ post.author_role === 'editor' ? 'Главный редактор' : 'Автор' }}
+              </span>
+            </div>
+          </NuxtLink>
+          <div v-else class="flex items-center gap-2">
             <img 
               v-if="post.author_avatar" 
               :src="post.author_avatar" 

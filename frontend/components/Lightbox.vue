@@ -161,7 +161,10 @@
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2 flex-wrap">
                     <!-- ✅ Полное имя автора комментария -->
-                    <span class="font-semibold text-white text-xs">{{ getAuthorFullName(comment) }}</span>
+                    <span
+                      class="font-semibold text-white text-xs cursor-pointer hover:text-blue-300 transition"
+                      @click="navigateTo(`/users/${comment.user}`)"
+                    >{{ getAuthorFullName(comment) }}</span>
                     <span class="text-white/30 text-[10px]">{{ formatTime(comment.created_at) }}</span>
                     
                     <!-- Кнопки редактирования и удаления -->
