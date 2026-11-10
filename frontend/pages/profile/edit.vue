@@ -146,19 +146,43 @@
             />
           </div>
           
-          <div>
-            <label class="block text-gray-700 dark:text-gray-300 mb-2 text-sm font-medium flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-              </svg>
-              Email
-            </label>
-            <input 
-              v-model="form.email"
-              type="email"
-              placeholder="example@mail.com"
-              class="w-full border border-gray-300 dark:border-gray-600 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-            />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 mb-2 text-sm font-medium flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                Email
+              </label>
+              <input
+                v-model="form.email"
+                type="email"
+                placeholder="example@mail.com"
+                class="w-full border border-gray-300 dark:border-gray-600 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+              />
+              <label class="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400 cursor-pointer">
+                <input type="checkbox" v-model="form.show_email" class="w-4 h-4 rounded text-blue-600" />
+                Показывать email на моей публичной странице
+              </label>
+            </div>
+            <div>
+              <label class="block text-gray-700 dark:text-gray-300 mb-2 text-sm font-medium flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                </svg>
+                Телефон
+              </label>
+              <input
+                v-model="form.phone"
+                type="tel"
+                placeholder="+7 (999) 123-45-67"
+                class="w-full border border-gray-300 dark:border-gray-600 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+              />
+              <label class="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400 cursor-pointer">
+                <input type="checkbox" v-model="form.show_phone" class="w-4 h-4 rounded text-blue-600" />
+                Показывать телефон на моей публичной странице
+              </label>
+            </div>
           </div>
           
           <div>
@@ -190,6 +214,45 @@
             ></textarea>
           </div>
           
+          <div class="border-t border-gray-100 dark:border-gray-700 pt-4">
+            <label class="block text-gray-700 dark:text-gray-300 mb-2 text-sm font-medium flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+              </svg>
+              Социальные сети
+            </label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                v-model="form.vk"
+                type="url"
+                placeholder="ВКонтакте: https://vk.com/…"
+                class="w-full border border-gray-300 dark:border-gray-600 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+              />
+              <input
+                v-model="form.max"
+                type="url"
+                placeholder="MAX: https://max.ru/…"
+                class="w-full border border-gray-300 dark:border-gray-600 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+              />
+              <input
+                v-model="form.ok"
+                type="url"
+                placeholder="Одноклассники: https://ok.ru/…"
+                class="w-full border border-gray-300 dark:border-gray-600 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+              />
+              <input
+                v-model="form.rutube"
+                type="url"
+                placeholder="RuTube: https://rutube.ru/…"
+                class="w-full border border-gray-300 dark:border-gray-600 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+              />
+            </div>
+            <label class="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400 cursor-pointer">
+              <input type="checkbox" v-model="form.show_socials" class="w-4 h-4 rounded text-blue-600" />
+              Показывать соцсети на моей публичной странице
+            </label>
+          </div>
+
           <div>
             <label class="block text-gray-700 dark:text-gray-300 mb-2 text-sm font-medium flex items-center gap-1.5">
               <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -391,7 +454,15 @@ const form = ref({
   birth_date: '',
   bio: '',
   role_display: '',
-  date_joined: ''
+  date_joined: '',
+  phone: '',
+  vk: '',
+  max: '',
+  ok: '',
+  rutube: '',
+  show_phone: false,
+  show_email: false,
+  show_socials: true
 })
 
 const userInitials = computed(() => {
@@ -461,7 +532,15 @@ const loadProfile = async () => {
         birth_date: user.birth_date || '',
         bio: user.bio || '',
         role_display: user.role_display || '',
-        date_joined: user.date_joined || ''
+        date_joined: user.date_joined || '',
+        phone: user.phone || '',
+        vk: user.vk || '',
+        max: user.max || '',
+        ok: user.ok || '',
+        rutube: user.rutube || '',
+        show_phone: !!user.show_phone,
+        show_email: !!user.show_email,
+        show_socials: user.show_socials !== false
       }
       
       if (user.avatar_url) {
@@ -491,6 +570,14 @@ const updateProfile = async () => {
     formData.append('patronymic', form.value.patronymic)
     formData.append('birth_date', form.value.birth_date || '')
     formData.append('bio', form.value.bio || '')
+    formData.append('phone', form.value.phone || '')
+    formData.append('vk', form.value.vk || '')
+    formData.append('max', form.value.max || '')
+    formData.append('ok', form.value.ok || '')
+    formData.append('rutube', form.value.rutube || '')
+    formData.append('show_phone', form.value.show_phone ? 'true' : 'false')
+    formData.append('show_email', form.value.show_email ? 'true' : 'false')
+    formData.append('show_socials', form.value.show_socials ? 'true' : 'false')
     
     if (avatarFile.value) {
       formData.append('avatar', avatarFile.value)

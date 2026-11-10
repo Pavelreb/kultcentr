@@ -135,6 +135,52 @@
       </div>
       
       <!-- ========================================== -->
+      <!-- СТАТИСТИКА АВТОРСТВА                      -->
+      <!-- ========================================== -->
+      <div v-if="authStore.isAuthor || authStore.isEditor" class="mt-8">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="p-2 rounded-xl bg-purple-100 dark:bg-purple-900/30">
+            <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">Статистика авторства</h2>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-5 text-center">
+            <svg class="w-6 h-6 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+            </svg>
+            <div class="text-2xl font-bold text-gray-800 dark:text-gray-200">{{ form.posts_count }}</div>
+            <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">Публикаций</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-5 text-center">
+            <svg class="w-6 h-6 mx-auto text-blue-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+            <div class="text-2xl font-bold text-gray-800 dark:text-gray-200">{{ form.total_views }}</div>
+            <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">Просмотров</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-5 text-center">
+            <svg class="w-6 h-6 mx-auto text-red-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+            <div class="text-2xl font-bold text-gray-800 dark:text-gray-200">{{ form.total_likes }}</div>
+            <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">Лайков</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-5 text-center">
+            <svg class="w-6 h-6 mx-auto text-amber-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <div class="text-2xl font-bold text-gray-800 dark:text-gray-200">{{ form.total_comments }}</div>
+            <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">Комментариев</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
       <!-- МОИ ПУБЛИКАЦИИ                           -->
       <!-- ========================================== -->
       <div v-if="authStore.isAuthor || authStore.isEditor" class="mt-8">
@@ -403,7 +449,11 @@ const form = ref({
   birth_date: '',
   bio: '',
   role_display: '',
-  date_joined: ''
+  date_joined: '',
+  posts_count: 0,
+  total_views: 0,
+  total_likes: 0,
+  total_comments: 0
 })
 
 const fullName = computed(() => {
@@ -514,7 +564,11 @@ const loadProfile = async () => {
         birth_date: user.birth_date || '',
         bio: user.bio || '',
         role_display: user.role_display || '',
-        date_joined: user.date_joined || ''
+        date_joined: user.date_joined || '',
+        posts_count: user.posts_count || 0,
+        total_views: user.total_views || 0,
+        total_likes: user.total_likes || 0,
+        total_comments: user.total_comments || 0
       }
       
       if (user.avatar_url) {
