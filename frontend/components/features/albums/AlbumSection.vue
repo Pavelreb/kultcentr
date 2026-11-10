@@ -23,7 +23,7 @@
       
       <NuxtLink 
         to="/gallery" 
-        class="group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20 rounded-xl hover:bg-pink-100 dark:hover:bg-pink-900/30 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
+        class="group hidden min-[460px]:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-pink-600 dark:text-pink-400 bg-pink-50 dark:bg-pink-900/20 rounded-xl hover:bg-pink-100 dark:hover:bg-pink-900/30 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
       >
         <span>Все альбомы</span>
         <svg 
@@ -38,8 +38,8 @@
     </div>
     
     <!-- Состояние загрузки -->
-    <div v-if="loading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-      <AlbumSkeleton v-for="i in itemsPerPage" :key="i" />
+    <div v-if="loading" class="grid grid-cols-2 max-[420px]:grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <AlbumSkeleton v-for="i in perPage" :key="i" />
     </div>
     
     <!-- Нет альбомов -->
@@ -55,7 +55,7 @@
     <!-- Сетка альбомов (карусель при пагинации) -->
     <div v-else class="relative carousel-viewport">
       <Transition :name="slideName">
-        <div :key="currentPage" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
+        <div :key="currentPage" class="grid grid-cols-2 max-[420px]:grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
           <AlbumCard
             v-for="album in currentPageItems"
             :key="album.id"
@@ -101,13 +101,26 @@ const currentPage = ref(1)
 const slideName = ref('slide-left')
 
 const totalItems = computed(() => props.albums.length)
+// Адаптивное количество: <420px — 2, 420–639px — 2, 640–767px — 3, 768–1023px — 4, ≥1024px — itemsPerPage
+const tier = ref(4)
+onMounted(() => {
+  const update = () => {
+    const w = window.innerWidth
+    tier.value = w >= 1024 ? 4 : w >= 768 ? 3 : w >= 640 ? 2 : w >= 420 ? 1 : 0
+  }
+  update()
+  window.addEventListener('resize', update)
+})
+const perPage = computed(() => [2, 2, 3, 4, props.itemsPerPage][tier.value])
+watch(perPage, () => { currentPage.value = 1 })
+
 const totalPages = computed(() => {
-  return Math.ceil(totalItems.value / props.itemsPerPage)
+  return Math.ceil(totalItems.value / perPage.value)
 })
 
 const currentPageItems = computed(() => {
-  const start = (currentPage.value - 1) * props.itemsPerPage
-  const end = start + props.itemsPerPage
+  const start = (currentPage.value - 1) * perPage.value
+  const end = start + perPage.value
   return props.albums.slice(start, end)
 })
 
