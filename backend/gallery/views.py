@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status, generics
+from rest_framework import viewsets, permissions, status, generics, filters
 from rest_framework.decorators import action
 from rest_framework.permissions import (
     IsAuthenticated,
@@ -27,6 +27,9 @@ class AlbumViewSet(viewsets.ModelViewSet):
 
     queryset = Album.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly, IsEditorOrReadOnly]
+    # Поиск: /api/albums/?search=текст
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["title", "description"]
 
     def get_serializer_class(self):
         if self.action == "list":

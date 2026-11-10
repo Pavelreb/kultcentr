@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -23,6 +23,9 @@ class PostViewSet(viewsets.ModelViewSet):
         IsAuthorOrEditorOrReadOnly,
         IsAuthorUser,
     ]
+    # Поиск: /api/posts/?search=текст
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["title", "content", "excerpt"]
 
     def get_queryset(self):
         user = self.request.user

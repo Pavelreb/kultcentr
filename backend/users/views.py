@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, filters
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.auth import get_user_model
@@ -36,6 +36,9 @@ class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = UserSerializer
+    # Поиск: /api/auth/users/?search=текст
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["username", "first_name", "last_name"]
 
 
 class CurrentUserView(generics.RetrieveAPIView):

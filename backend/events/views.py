@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -19,6 +19,9 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsEditorOrReadOnly]
     parser_classes = [MultiPartParser, FormParser]
+    # Поиск: /api/events/?search=текст
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["title", "content", "location", "excerpt"]
 
     def get_queryset(self):
         queryset = Event.objects.all()

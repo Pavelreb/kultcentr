@@ -28,6 +28,11 @@
           </svg>
         </button>
       </div>
+      <!-- Поиск — только на экранах <1024px (на десктопе он в шапке) -->
+      <div class="lg:hidden px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+        <SearchBar block @submitted="closeMenu" />
+      </div>
+
       <!-- Верхняя часть с информацией о пользователе -->
       <div v-if="authStore.isAuthenticated" class="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
         <div class="flex items-center gap-3">
@@ -213,6 +218,7 @@
 <script setup>
 import { useAuthStore } from '~/store/auth'
 import { useThemeStore } from '~/store/theme'
+import SearchBar from './SearchBar.vue'
 
 const authStore = useAuthStore()
 const themeStore = useThemeStore()
