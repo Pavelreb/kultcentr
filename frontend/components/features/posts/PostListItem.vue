@@ -4,27 +4,29 @@
     :to="`/posts/${post.id}`" 
     class="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col group hover:-translate-y-1"
   >
-    <!-- Изображение 16:9 -->
-    <div class="relative aspect-video overflow-hidden flex-shrink-0 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600">
-      <img 
-        v-if="post.display_image" 
-        :src="post.display_image" 
-        :alt="post.title" 
-        class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-        loading="lazy"
-      />
-      <div v-else class="w-full h-full flex items-center justify-center">
-        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9"/>
-        </svg>
-      </div>
-      
-      <!-- Бейдж "Черновик" -->
-      <div 
-        v-if="!post.is_published && showDraftBadge"
-        class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-400 text-black shadow-lg backdrop-blur-md"
-      >
-        Черновик
+    <!-- Изображение-постер 16:9 -->
+    <div class="p-3 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex-shrink-0">
+      <div class="relative aspect-video overflow-hidden rounded-lg shadow-md ring-1 ring-black/5 dark:ring-white/5 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600">
+        <img 
+          v-if="post.display_image" 
+          :src="post.display_image" 
+          :alt="post.title" 
+          class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+          loading="lazy"
+        />
+        <div v-else class="w-full h-full flex items-center justify-center">
+          <svg class="w-16 h-16 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9"/>
+          </svg>
+        </div>
+        
+        <!-- Бейдж "Черновик" -->
+        <div 
+          v-if="!post.is_published && showDraftBadge"
+          class="absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-400 text-black shadow-lg backdrop-blur-md"
+        >
+          Черновик
+        </div>
       </div>
     </div>
     

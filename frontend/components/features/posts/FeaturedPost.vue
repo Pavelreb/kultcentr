@@ -3,29 +3,31 @@
   <div v-if="post" class="mb-10">
     <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-700">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-        <!-- Левая колонка: Изображение -->
-        <div class="relative aspect-[9/16] md:aspect-auto md:min-h-[320px] lg:min-h-[400px] overflow-hidden bg-gradient-to-br from-blue-600 to-purple-700">
-          <img 
-            v-if="post.display_image" 
-            :src="post.display_image" 
-            :alt="post.title"
-            class="w-full h-full object-cover"
-          />
-          <div v-else class="w-full h-full flex items-center justify-center">
-            <svg class="w-24 h-24 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9"/>
-            </svg>
-          </div>
-          
-          <!-- Бейджи поверх изображения -->
-          <div class="absolute top-3 left-3 right-3 flex flex-wrap gap-2 z-10">
-            <div class="px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-amber-400 to-yellow-500 text-black shadow-lg backdrop-blur-md">
-              <span class="flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-                </svg>
-                ГЛАВНАЯ ПУБЛИКАЦИЯ
-              </span>
+        <!-- Левая колонка: Изображение-постер 16:9 -->
+        <div class="relative flex items-center justify-center p-4 md:p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+          <div class="relative aspect-video w-full rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5 dark:ring-white/5">
+            <img 
+              v-if="post.display_image" 
+              :src="post.display_image" 
+              :alt="post.title"
+              class="w-full h-full object-cover"
+            />
+            <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-700">
+              <svg class="w-24 h-24 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9"/>
+              </svg>
+            </div>
+            
+            <!-- Бейджи поверх изображения -->
+            <div class="absolute top-3 left-3 right-3 flex flex-wrap gap-2 z-10">
+              <div class="px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-amber-400 to-yellow-500 text-black shadow-lg backdrop-blur-md">
+                <span class="flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                  </svg>
+                  ГЛАВНАЯ ПУБЛИКАЦИЯ
+                </span>
+              </div>
             </div>
           </div>
         </div>

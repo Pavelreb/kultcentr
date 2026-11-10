@@ -10,12 +10,16 @@
 
     <!-- FOOTER -->
     <AppFooter />
+
+    <!-- Кнопка плавной прокрутки наверх -->
+    <ScrollToTop />
   </div>
 </template>
 
 <script setup>
 import AppHeader from '~/components/layout/AppHeader.vue'
 import AppFooter from '~/components/layout/AppFooter.vue'
+import ScrollToTop from '~/components/ScrollToTop.vue'
 import { useThemeStore } from '~/store/theme'
 
 const themeStore = useThemeStore()
