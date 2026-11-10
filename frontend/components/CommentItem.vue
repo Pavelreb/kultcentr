@@ -1,6 +1,6 @@
 <!-- frontend/components/CommentItem.vue -->
 <template>
-  <div class="comment-item py-4 border-b border-gray-100 dark:border-gray-700 last:border-0">
+  <div :id="`comment-${comment.id}`" class="comment-item py-4 border-b border-gray-100 dark:border-gray-700 last:border-0 scroll-mt-24">
     <div class="flex gap-3">
       <!-- Аватар -->
       <NuxtLink :to="`/authors/${comment.author_id || 0}`" class="flex-shrink-0">

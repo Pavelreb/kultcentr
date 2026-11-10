@@ -59,13 +59,22 @@ onMounted(() => {
   authStore.restoreAuth()
 })
 
+// Прокрутка к комментарию, если в адресе есть #comment-N (переход из «Мои комментарии»)
+const scrollToComment = async () => {
+  if (!route.hash) return
+  await nextTick()
+  const el = document.querySelector(route.hash)
+  if (el) smoothScrollToElement(el)
+}
+
 onMounted(async () => {
   try {
     const id = route.params.id
     const res = await apiFetch(`${API_URL}/posts/${id}/`)
-    
+
     if (res.ok) {
       post.value = await res.json()
+      scrollToComment()
     } else {
       router.push('/posts')
     }

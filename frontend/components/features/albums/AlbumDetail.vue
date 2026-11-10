@@ -260,6 +260,38 @@ const closeLightbox = () => {
   document.body.style.overflow = ''
 }
 
+// ============================================
+// Переход из «Мои комментарии»: ?photo=N#photo-comment-M
+// ============================================
+const route = useRoute()
+
+// Прокрутка до комментария внутри лайтбокса.
+// Комментарии подгружаются асинхронно — пробуем несколько раз.
+const scrollToPhotoComment = () => {
+  if (!route.hash) return
+  let attempts = 0
+  const tryScroll = () => {
+    const el = document.querySelector(route.hash)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    } else if (attempts++ < 10) {
+      setTimeout(tryScroll, 300)
+    }
+  }
+  setTimeout(tryScroll, 300)
+}
+
+// album приходит асинхронно — ждём его через watch (immediate: сразу проверяем тоже)
+watch(() => props.album, (album) => {
+  const photoId = Number(route.query.photo)
+  if (!photoId || !album?.photos) return
+  const index = album.photos.findIndex(p => p.id === photoId)
+  if (index !== -1) {
+    openLightbox(index)
+    scrollToPhotoComment()
+  }
+}, { immediate: true })
+
 const onPhotoUpdated = (updatedPhoto) => {
   const photoIndex = props.album.photos.findIndex(p => p.id === updatedPhoto.id)
   if (photoIndex !== -1) {
