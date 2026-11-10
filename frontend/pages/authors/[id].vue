@@ -63,6 +63,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 const route = useRoute()
 const author = ref(null)
 const posts = ref([])
@@ -94,19 +95,14 @@ onMounted(async () => {
   try {
     const authorId = route.params.id
     
-    const authorRes = await fetch(`${API_URL}/auth/users/${authorId}/`)
+    const authorRes = await apiFetch(`${API_URL}/auth/users/${authorId}/`)
     if (authorRes.ok) {
       author.value = await authorRes.json()
     }
     
     if (author.value?.username) {
-      const headers = {}
-      if (authStore.isAuthenticated) {
-        headers['Authorization'] = `Bearer ${authStore.accessToken}`
-      }
-      
       const url = `${API_URL}/posts/?author_name=${author.value.username}`
-      const postsRes = await fetch(url, { headers })
+      const postsRes = await apiFetch(url)
       if (postsRes.ok) {
         posts.value = await postsRes.json()
       }

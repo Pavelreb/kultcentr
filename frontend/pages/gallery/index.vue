@@ -25,6 +25,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 const albums = ref([])
 const loading = ref(true)
 
@@ -39,11 +40,7 @@ onMounted(() => {
 
 onMounted(async () => {
   try {
-    const headers = {}
-    if (authStore.isAuthenticated) {
-      headers['Authorization'] = `Bearer ${authStore.accessToken}`
-    }
-    const res = await fetch(`${API_URL}/albums/`, { headers })
+    const res = await apiFetch(`${API_URL}/albums/`)
     if (res.ok) {
       albums.value = await res.json()
     }

@@ -256,6 +256,7 @@ const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const route = useRoute()
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 const router = useRouter()
 
 const postId = computed(() => {
@@ -335,10 +336,7 @@ const removeNewImage = () => {
 // Загрузка данных поста
 onMounted(async () => {
   try {
-    const res = await fetch(`${API_URL}/posts/${postId.value}/`, {
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
+    const res = await apiFetch(`${API_URL}/posts/${postId.value}/`, {
     })
     
     if (res.ok) {
@@ -387,11 +385,8 @@ const updatePost = async () => {
       const formData = new FormData()
       formData.append('image', imageFile.value)
       
-      const uploadRes = await fetch(`${API_URL}/posts/upload-image/`, {
+      const uploadRes = await apiFetch(`${API_URL}/posts/upload-image/`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${authStore.accessToken}`
-        },
         body: formData
       })
       
@@ -408,11 +403,10 @@ const updatePost = async () => {
       finalImageUrl = imageUrl.value
     }
     
-    const res = await fetch(`${API_URL}/posts/${postId.value}/`, {
+    const res = await apiFetch(`${API_URL}/posts/${postId.value}/`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         title: form.value.title,
@@ -443,11 +437,8 @@ const deletePost = async () => {
   if (!confirm(`Вы уверены, что хотите удалить пост "${form.value.title}"?`)) return
   
   try {
-    const res = await fetch(`${API_URL}/posts/${postId.value}/`, {
+    const res = await apiFetch(`${API_URL}/posts/${postId.value}/`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
     })
     
     if (res.ok) {

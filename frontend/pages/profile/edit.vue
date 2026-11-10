@@ -369,6 +369,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 const router = useRouter()
 
 const loading = ref(true)
@@ -446,10 +447,7 @@ const onAvatarSelected = (event) => {
 
 const loadProfile = async () => {
   try {
-    const res = await fetch(`${API_URL}/auth/users/me/`, {
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
+    const res = await apiFetch(`${API_URL}/auth/users/me/`, {
     })
     
     if (res.ok) {
@@ -498,11 +496,8 @@ const updateProfile = async () => {
       formData.append('avatar', avatarFile.value)
     }
     
-    const res = await fetch(`${API_URL}/auth/users/me/update/`, {
+    const res = await apiFetch(`${API_URL}/auth/users/me/update/`, {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      },
       body: formData
     })
     
@@ -551,11 +546,10 @@ const changePassword = async () => {
   passwordSuccess.value = ''
   
   try {
-    const res = await fetch(`${API_URL}/auth/users/me/change-password/`, {
+    const res = await apiFetch(`${API_URL}/auth/users/me/change-password/`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         old_password: passwordForm.value.old_password,

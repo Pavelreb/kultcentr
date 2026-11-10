@@ -28,6 +28,7 @@ const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 
 const post = ref(null)
 const loading = ref(true)
@@ -39,11 +40,8 @@ const breadcrumbItems = [
 
 const handleDelete = async (postId) => {
   try {
-    const res = await fetch(`${API_URL}/posts/${postId}/`, {
+    const res = await apiFetch(`${API_URL}/posts/${postId}/`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
     })
     
     if (res.ok) {
@@ -64,11 +62,7 @@ onMounted(() => {
 onMounted(async () => {
   try {
     const id = route.params.id
-    const headers = {}
-    if (authStore.isAuthenticated) {
-      headers['Authorization'] = `Bearer ${authStore.accessToken}`
-    }
-    const res = await fetch(`${API_URL}/posts/${id}/`, { headers })
+    const res = await apiFetch(`${API_URL}/posts/${id}/`)
     
     if (res.ok) {
       post.value = await res.json()

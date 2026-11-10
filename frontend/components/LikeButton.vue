@@ -41,6 +41,7 @@ const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 
 const likesCount = ref(props.initialLikesCount)
 const isLiked = ref(props.initialIsLiked)
@@ -66,11 +67,10 @@ const toggleLike = async () => {
       return
     }
     
-    const res = await fetch(`${API_URL}/likes/`, {
+    const res = await apiFetch(`${API_URL}/likes/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     })

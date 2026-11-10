@@ -77,6 +77,7 @@ import { useAuthStore } from '~/store/auth'
 import UiButton from '~/components/ui/UiButton.vue'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 
 const props = defineProps({
   postId: {
@@ -156,11 +157,10 @@ const submitComment = async () => {
       body.parent = replyToCommentId.value
     }
     
-    const res = await fetch(`${API_URL}/comments/`, {
+    const res = await apiFetch(`${API_URL}/comments/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     })
@@ -229,11 +229,10 @@ const saveEditComment = async (commentId, content) => {
   savingEdit.value = true
   
   try {
-    const res = await fetch(`${API_URL}/comments/${commentId}/`, {
+    const res = await apiFetch(`${API_URL}/comments/${commentId}/`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         content: content.trim()
@@ -281,11 +280,8 @@ const deleteComment = async (commentId) => {
   if (!confirm('Вы уверены, что хотите удалить этот комментарий?')) return
   
   try {
-    const res = await fetch(`${API_URL}/comments/${commentId}/`, {
+    const res = await apiFetch(`${API_URL}/comments/${commentId}/`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
     })
     
     if (res.ok) {

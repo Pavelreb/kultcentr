@@ -293,6 +293,7 @@ const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const route = useRoute()
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 const router = useRouter()
 
 const eventId = computed(() => {
@@ -375,10 +376,7 @@ const removeNewImage = () => {
 // Загрузка данных события
 onMounted(async () => {
   try {
-    const res = await fetch(`${API_URL}/events/${eventId.value}/`, {
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
+    const res = await apiFetch(`${API_URL}/events/${eventId.value}/`, {
     })
     
     if (res.ok) {
@@ -434,11 +432,8 @@ const updateEvent = async () => {
       formData.append('image_url', form.value.image_url)
     }
     
-    const res = await fetch(`${API_URL}/events/${eventId.value}/`, {
+    const res = await apiFetch(`${API_URL}/events/${eventId.value}/`, {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      },
       body: formData
     })
     
@@ -462,11 +457,8 @@ const deleteEvent = async () => {
   if (!confirm(`Вы уверены, что хотите удалить событие "${form.value.title}"?`)) return
   
   try {
-    const res = await fetch(`${API_URL}/events/${eventId.value}/`, {
+    const res = await apiFetch(`${API_URL}/events/${eventId.value}/`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
     })
     
     if (res.ok) {

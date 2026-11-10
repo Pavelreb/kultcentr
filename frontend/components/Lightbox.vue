@@ -251,6 +251,7 @@
 import { useAuthStore } from '~/store/auth'
 
 const authStore = useAuthStore()
+const { apiFetch } = useApi()
 
 const props = defineProps({
   photos: {
@@ -365,11 +366,8 @@ const toggleLike = async () => {
   isLiking.value = true
   
   try {
-    const res = await fetch(`${API_URL}/albums/${props.albumId}/photos/${currentPhoto.value.id}/like/`, {
+    const res = await apiFetch(`${API_URL}/albums/${props.albumId}/photos/${currentPhoto.value.id}/like/`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
     })
     
     if (res.ok) {
@@ -401,11 +399,10 @@ const submitComment = async () => {
   submitting.value = true
   
   try {
-    const res = await fetch(`${API_URL}/photo-comments/`, {
+    const res = await apiFetch(`${API_URL}/photo-comments/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         photo: currentPhoto.value.id,
@@ -451,11 +448,10 @@ const saveEditComment = async (commentId) => {
   savingEdit.value = true
   
   try {
-    const res = await fetch(`${API_URL}/photo-comments/${commentId}/`, {
+    const res = await apiFetch(`${API_URL}/photo-comments/${commentId}/`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authStore.accessToken}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         content: editCommentContent.value.trim()
@@ -488,11 +484,8 @@ const deleteComment = async (commentId) => {
   if (!confirm('Удалить этот комментарий?')) return
   
   try {
-    const res = await fetch(`${API_URL}/photo-comments/${commentId}/`, {
+    const res = await apiFetch(`${API_URL}/photo-comments/${commentId}/`, {
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${authStore.accessToken}`
-      }
     })
     
     if (res.ok) {
@@ -561,7 +554,7 @@ watch(currentIndex, () => {
 
 const incrementViews = async (photoId) => {
   try {
-    await fetch(`${API_URL}/albums/${props.albumId}/photos/${photoId}/view/`, {
+    await apiFetch(`${API_URL}/albums/${props.albumId}/photos/${photoId}/view/`, {
       method: 'POST'
     })
   } catch (e) {
