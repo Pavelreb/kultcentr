@@ -5,29 +5,31 @@
     class="group bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1 block"
   >
     <div class="grid grid-cols-1 sm:grid-cols-3">
-      <!-- Левая колонка: Изображение (вертикальное) с минимальной высотой -->
-      <div class="relative aspect-[9/16] sm:aspect-auto sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] overflow-hidden bg-gradient-to-br from-blue-600 to-purple-700">
-        <img 
-          v-if="event.display_image" 
-          :src="event.display_image" 
-          :alt="event.title" 
-          class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-          loading="lazy"
-        />
-        <div v-else class="w-full h-full flex items-center justify-center">
-          <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2H5zM3 19a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 00-2-2H5a2 2 0 00-2 2v3z"/>
-          </svg>
-        </div>
-        
-        <!-- Бейджи поверх изображения -->
-        <div class="absolute top-2 left-2 right-2 flex flex-wrap gap-1.5 z-10">
-          <span 
-            v-if="!event.is_published && showDraftBadge"
-            class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-yellow-400 text-black shadow-lg backdrop-blur-md"
-          >
-            Черновик
-          </span>
+      <!-- Левая колонка: Изображение как вертикальный постер 9:16 -->
+      <div class="relative flex items-center justify-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+        <div class="relative aspect-[9/16] w-full max-w-[280px] sm:max-w-[200px] md:max-w-[220px] rounded-xl overflow-hidden shadow-lg ring-1 ring-black/5 dark:ring-white/5">
+          <img 
+            v-if="event.display_image" 
+            :src="event.display_image" 
+            :alt="event.title" 
+            class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+            loading="lazy"
+          />
+          <div v-else class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-700">
+            <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2H5zM3 19a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 00-2-2H5a2 2 0 00-2 2v3z"/>
+            </svg>
+          </div>
+          
+          <!-- Бейджи поверх изображения -->
+          <div class="absolute top-2 left-2 right-2 flex flex-wrap gap-1.5 z-10">
+            <span 
+              v-if="!event.is_published && showDraftBadge"
+              class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-yellow-400 text-black shadow-lg backdrop-blur-md"
+            >
+              Черновик
+            </span>
+          </div>
         </div>
       </div>
       

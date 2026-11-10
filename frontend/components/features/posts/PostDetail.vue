@@ -3,8 +3,9 @@
   <div v-if="post" class="max-w-4xl mx-auto">
     <!-- Основной блок -->
     <div class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-700">
-      <!-- Изображение 16:9 с кнопкой лайка -->
-      <div class="relative aspect-video overflow-hidden bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 group/image">
+      <!-- Изображение-постер 16:9 с кнопкой лайка -->
+      <div class="p-4 md:p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+        <div class="relative aspect-video overflow-hidden rounded-2xl shadow-2xl ring-1 ring-black/5 dark:ring-white/5 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 group/image">
         <img 
           v-if="post.display_image" 
           :src="post.display_image" 
@@ -55,6 +56,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
           </svg>
           <span>{{ post.likes_count || 0 }}</span>
+        </div>
         </div>
       </div>
       
