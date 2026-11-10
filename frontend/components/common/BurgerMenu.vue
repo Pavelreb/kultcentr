@@ -13,9 +13,21 @@
     
     <div 
       v-if="isMenuOpen"
-      class="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50"
+      class="absolute right-0 top-full mt-2 w-64 max-sm:fixed max-sm:top-16 max-sm:left-4 max-sm:right-4 max-sm:w-auto max-sm:mt-0 max-sm:max-h-[calc(100vh-5rem)] max-sm:overflow-y-auto bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2 z-50"
       @click.stop
     >
+          <!-- Кнопка закрытия — только на мобильных -->
+      <div class="sm:hidden flex justify-end px-2">
+        <button
+          @click="closeMenu"
+          class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition text-gray-500 dark:text-gray-400"
+          aria-label="Закрыть меню"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
       <!-- Верхняя часть с информацией о пользователе -->
       <div v-if="authStore.isAuthenticated" class="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
         <div class="flex items-center gap-3">
@@ -129,7 +141,20 @@
         </svg>
         Настройки сайта
       </NuxtLink>
-      
+            <!-- Переключатель темы — только на мобильных -->
+      <div class="sm:hidden border-t border-gray-200 dark:border-gray-700 my-1"></div>
+      <button
+        @click="themeStore.toggleTheme()"
+        class="sm:hidden flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition w-full text-left"
+      >
+        <svg v-if="themeStore.darkMode" class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <svg v-else class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+        {{ themeStore.darkMode ? 'Светлая тема' : 'Тёмная тема' }}
+      </button>
       <div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
       <div class="px-3 py-1.5 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
         Аккаунт
@@ -187,8 +212,10 @@
 
 <script setup>
 import { useAuthStore } from '~/store/auth'
+import { useThemeStore } from '~/store/theme'
 
 const authStore = useAuthStore()
+const themeStore = useThemeStore()
 
 const isMenuOpen = ref(false)
 const menuRef = ref(null)
