@@ -11,8 +11,11 @@
       <!-- Правая часть: Создать + Переключатель темы + Кнопки пользователя -->
       <div class="flex items-center gap-2 md:gap-4">
         <CreateMenu />
-        <ThemeToggle />
-        <AuthButtons />
+        <!-- На мобильных (<640px) скрыто — эти действия живут в бургер-меню -->
+        <div class="hidden sm:flex items-center gap-2 md:gap-4">
+          <ThemeToggle />
+          <AuthButtons />
+        </div>
       </div>
     </div>
   </header>
