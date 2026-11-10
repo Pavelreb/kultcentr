@@ -1,6 +1,14 @@
 <!-- frontend/pages/guide.vue -->
 <template>
   <div class="max-w-5xl mx-auto mt-10 px-4 pb-16">
+    <div v-if="!canAccess" class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow text-center py-20 border border-gray-100 dark:border-gray-700">
+      <svg class="w-24 h-24 mx-auto text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+      </svg>
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2 mt-4">Доступ запрещён</h2>
+      <p class="text-gray-600 dark:text-gray-400">Справочник доступен только авторам и редакторам.</p>
+    </div>
+    <template v-else>
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-3">
         <svg class="w-8 h-8 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -9,7 +17,7 @@
         Справочник
       </h1>
       <p class="mt-2 text-gray-500 dark:text-gray-400">
-        Как оформлять афиши, публикации и фотоальбомы: форматы изображений, безопасные зоны и советы.
+        Как оформлять афиши, публикации, фотоальбомы и раздел «Об учреждении»: форматы изображений, безопасные зоны и советы.
       </p>
     </div>
 
@@ -23,6 +31,18 @@
       </a>
       <a href="#guide-albums" class="px-4 py-2 text-sm font-medium rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition">
         Фотоальбомы
+      </a>
+      <a href="#guide-banner" class="px-4 py-2 text-sm font-medium rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 hover:bg-cyan-200 dark:hover:bg-cyan-900/50 transition">
+        Баннер
+      </a>
+      <a href="#guide-staff" class="px-4 py-2 text-sm font-medium rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50 transition">
+        Сотрудники
+      </a>
+      <a href="#guide-clubs" class="px-4 py-2 text-sm font-medium rounded-full bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 hover:bg-teal-200 dark:hover:bg-teal-900/50 transition">
+        Клубные формирования
+      </a>
+      <a href="#guide-achievements" class="px-4 py-2 text-sm font-medium rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition">
+        Достижения
       </a>
     </div>
 
@@ -159,15 +179,15 @@
         Обложка фотоальбома
       </h2>
       <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-        У обложки альбома <b>нет строгого формата</b>: на странице альбома она показывается целиком, без обрезки — рамка подстраивается под пропорции изображения.
+        Рекомендуемый формат обложки альбома — <b>квадрат 1:1</b>: так она одинаково хорошо смотрится и в карточках на странице «Галерея», и на странице самого альбома.
       </p>
 
       <div class="overflow-x-auto mb-5">
         <table class="w-full text-sm">
           <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
-            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Соотношение сторон</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">Любое; лучше всего 3:2 или 4:3 (горизонтальное)</td></tr>
-            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Рекомендуемый размер</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">1200 × 900 px</td></tr>
-            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Максимальная высота показа</td><td class="py-2 text-gray-800 dark:text-gray-200">520 px — очень высокие вертикальные обложки ужмутся</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Соотношение сторон</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">1:1 (квадрат)</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Рекомендуемый размер</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">1200 × 1200 px</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Минимальный размер</td><td class="py-2 text-gray-800 dark:text-gray-200">800 × 800 px</td></tr>
             <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Формат файла</td><td class="py-2 text-gray-800 dark:text-gray-200">JPG, PNG, WebP</td></tr>
             <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Вес файла</td><td class="py-2 text-gray-800 dark:text-gray-200">до 500 КБ</td></tr>
           </tbody>
@@ -176,15 +196,163 @@
 
       <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc pl-5">
         <li><b class="text-gray-800 dark:text-gray-200">Карточки альбомов</b> на странице «Галерея» обрезают обложку под свой кадр — выбирайте обложку, где главное находится в центре.</li>
-        <li>На странице альбома обложка видна целиком, поэтому подойдёт и вертикальный кадр, и панорама.</li>
+        <li>На странице альбома обложка показывается целиком, но квадратная обложка занимает место аккуратнее и не растягивает страницу по высоте.</li>
+        <li>Если под рукой только горизонтальное или вертикальное фото — обрежьте его под квадрат заранее, чтобы обрезка не случилась автоматически в неудачном месте.</li>
       </ul>
     </section>
+
+    <!-- ======== Баннер (главная и «Об учреждении») ======== -->
+    <section id="guide-banner" class="scroll-mt-24 bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 mt-8">
+      <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-4">
+        <svg class="w-6 h-6 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        Баннер
+      </h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+        Баннер используется на двух страницах: на <b>главной</b> (настраивается в «Настройки сайта → Баннер») и на странице <b>«Об учреждении»</b> («Настройки сайта → Об учреждении»).
+        Устройство у них одинаковое: широкое фоновое изображение, поверх — затемнение и текст по центру. На странице «Об учреждении» дополнительно выводится <b>логотип</b> учреждения.
+        Рекомендации по фону одинаковы для обоих баннеров.
+      </p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Фоновое изображение</h3>
+      <div class="overflow-x-auto mb-4">
+        <table class="w-full text-sm">
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Соотношение сторон</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">Широкое горизонтальное, примерно 16:5</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Рекомендуемый размер</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">1920 × 600 px</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Формат файла</td><td class="py-2 text-gray-800 dark:text-gray-200">JPG, WebP</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Вес файла</td><td class="py-2 text-gray-800 dark:text-gray-200">до 500 КБ</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc pl-5 mb-5">
+        <li>Фон <b>обрезается под широкую горизонтальную полосу</b> и затемняется — мелкий текст и лица на нём теряются, используйте атмосферное фото (здание, сцена, зал).</li>
+        <li>Центр кадра перекрыт текстом (на «Об учреждении» — ещё и логотипом) — главное в фото держите ближе к краям или используйте нейтральный фон.</li>
+        <li>Если фон не загружен, показывается цветной градиент по умолчанию.</li>
+      </ul>
+
+      <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Логотип (только «Об учреждении»)</h3>
+      <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc pl-5">
+        <li><b class="text-gray-800 dark:text-gray-200">Квадратный</b>, минимум 400 × 400 px; отображается в круглой рамке — важное не должно касаться углов.</li>
+        <li>Лучше всего <b>PNG с прозрачным фоном</b>; подойдут и JPG/WebP до 500 КБ.</li>
+        <li>Если логотип не загружен, показывается иконка-заглушка.</li>
+      </ul>
+    </section>
+
+    <!-- ======== Фото сотрудников ======== -->
+    <section id="guide-staff" class="scroll-mt-24 bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 mt-8">
+      <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-4">
+        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        Фото сотрудника
+      </h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+        Фото сотрудника показывается <b>в круглой рамке</b> в карточках на страницах «Об учреждении» и «Наши сотрудники». Настраивается в «Настройки сайта → Сотрудники».
+      </p>
+
+      <div class="overflow-x-auto mb-5">
+        <table class="w-full text-sm">
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Соотношение сторон</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">1:1 (квадрат)</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Рекомендуемый размер</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">600 × 600 px</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Минимальный размер</td><td class="py-2 text-gray-800 dark:text-gray-200">400 × 400 px</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Формат файла</td><td class="py-2 text-gray-800 dark:text-gray-200">JPG, PNG, WebP</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Вес файла</td><td class="py-2 text-gray-800 dark:text-gray-200">до 500 КБ</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc pl-5">
+        <li>Лицо — <b>по центру кадра</b>, углы изображения обрежутся круглой рамкой.</li>
+        <li>Лучше всего работает портрет по пояс или по плечи на спокойном фоне.</li>
+        <li>Если сотрудник привязан к пользователю сайта и фото не загружено, подставится его аватар; если нет и его — инициалы.</li>
+      </ul>
+    </section>
+
+    <!-- ======== Изображения клубных формирований ======== -->
+    <section id="guide-clubs" class="scroll-mt-24 bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 mt-8">
+      <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-4">
+        <svg class="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        Изображение клубного формирования
+      </h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+        Изображение формирования везде отображается как <b>горизонтальный кадр 16:9</b>: в карточках на страницах «Об учреждении» и «Клубные формирования», а также крупно на странице самого формирования. Настраивается в «Настройки сайта → Клубные формирования».
+      </p>
+
+      <div class="overflow-x-auto mb-5">
+        <table class="w-full text-sm">
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Соотношение сторон</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">16:9 (строго горизонтальное)</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Рекомендуемый размер</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">1600 × 900 px</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Минимальный размер</td><td class="py-2 text-gray-800 dark:text-gray-200">1280 × 720 px</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Формат файла</td><td class="py-2 text-gray-800 dark:text-gray-200">JPG (фото), PNG (графика), WebP</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Вес файла</td><td class="py-2 text-gray-800 dark:text-gray-200">до 500 КБ</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc pl-5">
+        <li>Если пропорции не 16:9, картинка <b>обрежется сверху и снизу</b> — ключевое держите по центру кадра.</li>
+        <li>Идеально подходят фото занятий, репетиций, выступлений коллектива.</li>
+        <li>Если изображение не загружено, вместо него показывается заглушка-иконка.</li>
+      </ul>
+    </section>
+
+    <!-- ======== Изображения достижений ======== -->
+    <section id="guide-achievements" class="scroll-mt-24 bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 mt-8">
+      <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-4">
+        <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+        </svg>
+        Изображение достижения
+      </h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+        Изображение достижения везде отображается как <b>горизонтальный кадр 16:9</b>: в карточках на страницах «Об учреждении» и «Достижения», а также крупно на странице самого достижения. Настраивается в «Настройки сайта → Достижения».
+      </p>
+
+      <div class="overflow-x-auto mb-5">
+        <table class="w-full text-sm">
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Соотношение сторон</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">16:9 (строго горизонтальное)</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Рекомендуемый размер</td><td class="py-2 text-gray-800 dark:text-gray-200 font-medium">1600 × 900 px</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Минимальный размер</td><td class="py-2 text-gray-800 dark:text-gray-200">1280 × 720 px</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Формат файла</td><td class="py-2 text-gray-800 dark:text-gray-200">JPG (фото), PNG (скан диплома/грамоты), WebP</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-500 dark:text-gray-400 whitespace-nowrap">Вес файла</td><td class="py-2 text-gray-800 dark:text-gray-200">до 500 КБ</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc pl-5">
+        <li>Если пропорции не 16:9, картинка <b>обрежется сверху и снизу</b> — диплом или грамоту сфотографируйте/отсканируйте горизонтально, с запасом по краям.</li>
+        <li>Подходят фото награждения, сканы дипломов и грамот, кубки и медали.</li>
+        <li>Если изображение не загружено, вместо него показывается заглушка-иконка.</li>
+      </ul>
+    </section>
+    </template>
   </div>
 </template>
 
 <script setup>
+import { useAuthStore } from '~/store/auth'
+
+definePageMeta({
+  middleware: ['auth']
+})
+
 useSeoMeta({
   title: 'Справочник',
   description: 'Как оформлять афиши, публикации и фотоальбомы: форматы изображений, безопасные зоны и советы.'
+})
+
+const authStore = useAuthStore()
+
+const canAccess = computed(() => authStore.isAuthor || authStore.isEditor)
+
+onMounted(() => {
+  authStore.restoreAuth()
 })
 </script>

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "contactinfo",
     "banner",
     "gallery",
+    "about",
 ]
 
 MIDDLEWARE = [

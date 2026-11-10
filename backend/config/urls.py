@@ -15,6 +15,7 @@ urlpatterns = [
     path("api/auth/", include("users.urls")),
     path("api/contact-info/", include("contactinfo.urls")),
     path("api/banner/", include("banner.urls")),
+    path("api/about/", include("about.urls")),
 ]
 
 if settings.DEBUG:
