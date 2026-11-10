@@ -46,10 +46,13 @@ const breadcrumbItems = [
   { label: 'Афиша' }
 ]
 
-// Самое ближайшее событие (главная афиша)
+// Главная афиша: выбранная редактором, иначе — самое ближайшее событие
 const featuredEvent = computed(() => {
   if (events.value.length === 0) return null
-  
+
+  const manual = events.value.find(e => e.is_featured && e.is_published)
+  if (manual) return manual
+
   const sorted = [...events.value]
     .filter(e => e.is_published)
     .sort((a, b) => {
@@ -57,7 +60,7 @@ const featuredEvent = computed(() => {
       if (!b.event_date) return -1
       return new Date(a.event_date) - new Date(b.event_date)
     })
-  
+
   return sorted.length > 0 ? sorted[0] : events.value[0]
 })
 

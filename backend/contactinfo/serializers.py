@@ -12,9 +12,10 @@ class ContactInfoSerializer(serializers.ModelSerializer):
             "email",
             "work_hours",
             "description",
-            "instagram",
             "vk",
-            "telegram",
+            "max",
+            "ok",
+            "rutube",
             "updated_at",
         ]
         read_only_fields = ["id", "updated_at"]

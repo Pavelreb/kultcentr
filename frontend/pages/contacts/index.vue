@@ -101,7 +101,7 @@
           </ul>
           
           <!-- Социальные сети -->
-          <div v-if="contact.instagram || contact.vk || contact.telegram" class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div v-if="contact.vk || contact.max || contact.ok || contact.rutube" class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
@@ -109,37 +109,48 @@
               Мы в соцсетях
             </h3>
             <div class="flex gap-3">
-              <a 
-                v-if="contact.instagram" 
-                :href="contact.instagram" 
-                target="_blank" 
-                class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-orange-500 flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg hover:shadow-xl"
-                title="Instagram"
-              >
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-                </svg>
-              </a>
-              <a 
-                v-if="contact.vk" 
-                :href="contact.vk" 
-                target="_blank" 
+              <a
+                v-if="contact.vk"
+                :href="contact.vk"
+                target="_blank"
                 class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg hover:shadow-xl"
-                title="VK"
+                title="ВКонтакте"
               >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.949 2.059-1.604 1.488 1.488 1.796 2.519 3.603 2.519h3.2c.808 0 1.126-.26 1.126-.668 0-.863-1.421-2.386-2.625-3.504-1.686-1.565-1.765-1.602-.313-3.486 1.507-1.949 2.505-3.995 1.628-4.147-.244-.04-1.183-.05-2.303.018-.079.008-.146.03-.206.066-.128.075-.252.17-.389.291-1.158 1.039-2.208 2.313-2.562 2.486-.105.052-.18.063-.259.045-.142-.034-.338-.212-.354-.944-.028-1.258-.341-2.021-.946-2.384-.283-.17-.494-.262-1.371-.252-.674.007-1.172.055-1.613.336-.24.153-.383.367-.565.763-.07.153-.146.354-.226.617-.242.788-.483 1.574-1.037 2.287-.335.431-.748.899-1.155 1.331-.133.143-.255.273-.38.399-.425.428-.729.459-.915.445-.389-.029-.786-.044-1.054-.11-.703-.174-1.004-.854-1.08-1.398-.037-.265-.117-.712-.132-.997-.034-.663-.172-1.164-.628-1.455-.273-.174-.655-.249-1.273-.252-.816-.004-1.337.161-1.582.611-.21.386-.091.979.009 1.279.067.201.186.436.315.685.344.664.736 1.421 1.248 2.134.87 1.213 1.62 2.116 2.546 3.087.886.93 1.751 1.487 2.713 1.805.449.149.761.205 1.141.21z"/>
                 </svg>
               </a>
-              <a 
-                v-if="contact.telegram" 
-                :href="contact.telegram" 
-                target="_blank" 
-                class="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg hover:shadow-xl"
-                title="Telegram"
+              <a
+                v-if="contact.max"
+                :href="contact.max"
+                target="_blank"
+                class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg hover:shadow-xl"
+                title="MAX"
               >
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                  <path d="M12 2C6.48 2 2 6.02 2 11c0 2.4 1.05 4.6 2.77 6.27-.13.86-.65 2.47-1.65 3.73 1.4-.08 3.13-.68 4.16-1.22.86.25 1.78.39 2.72.39 5.52 0 10-4.02 10-8.97S17.52 2 12 2zm-4.5 9.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm4.5 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm4.5 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                </svg>
+              </a>
+              <a
+                v-if="contact.ok"
+                :href="contact.ok"
+                target="_blank"
+                class="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg hover:shadow-xl"
+                title="Одноклассники"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2a5 5 0 00-5 5c0 2.76 2.24 5 5 5s5-2.24 5-5a5 5 0 00-5-5zm0 8a3 3 0 110-6 3 3 0 010 6zm5.83 3.42a1.25 1.25 0 00-1.77-.15c-1.1.94-2.55 1.5-4.06 1.5s-2.96-.56-4.06-1.5a1.25 1.25 0 10-1.62 1.9c1.28 1.1 2.87 1.76 4.55 1.93l-2.6 3.9a1.25 1.25 0 102.06 1.4L12 19.66l1.67 2.51a1.25 1.25 0 102.06-1.4l-2.6-3.9c1.68-.17 3.27-.83 4.55-1.93.5-.42.56-1.17.15-1.62z"/>
+                </svg>
+              </a>
+              <a
+                v-if="contact.rutube"
+                :href="contact.rutube"
+                target="_blank"
+                class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 shadow-lg hover:shadow-xl"
+                title="RuTube"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
                 </svg>
               </a>
             </div>

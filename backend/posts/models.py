@@ -26,6 +26,10 @@ class Post(models.Model):
 
     views = models.PositiveIntegerField(default=0, verbose_name="Просмотры")
 
+    is_featured = models.BooleanField(
+        default=False, verbose_name="Главная публикация"
+    )
+
     def __str__(self):
         return self.title
 

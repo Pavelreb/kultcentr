@@ -168,6 +168,37 @@ class EventViewSet(viewsets.ModelViewSet):
                     print(f"❌ Ошибка удаления: {e}")
         instance.delete()
 
+    @action(detail=True, methods=["post"], url_path="feature")
+    def feature(self, request, pk=None):
+        """Назначить событие главной афишей (только редактор)"""
+        user = request.user
+        if not user.is_authenticated or user.role != "editor":
+            return Response({"detail": "Недостаточно прав"}, status=403)
+
+        event = get_object_or_404(Event, pk=pk)
+        if not event.is_published:
+            return Response(
+                {"detail": "Главной может быть только опубликованная афиша"},
+                status=400,
+            )
+
+        Event.objects.filter(is_featured=True).exclude(pk=event.pk).update(
+            is_featured=False
+        )
+        event.is_featured = True
+        event.save(update_fields=["is_featured"])
+        return Response(self.get_serializer(event).data)
+
+    @action(detail=False, methods=["post"], url_path="unfeature")
+    def unfeature(self, request):
+        """Сбросить главную афишу — выбор станет автоматическим"""
+        user = request.user
+        if not user.is_authenticated or user.role != "editor":
+            return Response({"detail": "Недостаточно прав"}, status=403)
+
+        Event.objects.filter(is_featured=True).update(is_featured=False)
+        return Response({"detail": "Главная афиша сброшена"})
+
     @action(detail=False, methods=["get"], url_path="my_events")
     def my_events(self, request):
         user = request.user

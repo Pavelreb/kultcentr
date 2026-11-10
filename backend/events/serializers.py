@@ -25,6 +25,7 @@ class EventSerializer(serializers.ModelSerializer):
             "updated_at",
             "is_published",
             "excerpt",
+            "is_featured",
         ]
         read_only_fields = [
             "author",
@@ -32,6 +33,7 @@ class EventSerializer(serializers.ModelSerializer):
             "author_role",
             "created_at",
             "updated_at",
+            "is_featured",
         ]
         extra_kwargs = {
             "image": {"required": False, "allow_null": True},

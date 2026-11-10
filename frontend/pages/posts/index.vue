@@ -51,14 +51,17 @@ const breadcrumbItems = [
   { label: 'Публикации' }
 ]
 
-// Самая свежая опубликованная публикация (главный пост)
+// Главная публикация: выбранная редактором, иначе — самая свежая опубликованная
 const featuredPost = computed(() => {
   if (posts.value.length === 0) return null
-  
+
+  const manual = posts.value.find(p => p.is_featured && p.is_published)
+  if (manual) return manual
+
   const sorted = [...posts.value]
     .filter(p => p.is_published)
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-  
+
   return sorted.length > 0 ? sorted[0] : posts.value[0]
 })
 

@@ -38,6 +38,7 @@ class PostSerializer(serializers.ModelSerializer):
             "updated_at",
             "is_published",
             "excerpt",
+            "is_featured",
             "comments",
             "likes_count",
             "user_has_liked",
@@ -54,6 +55,7 @@ class PostSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "views",
+            "is_featured",
         ]
 
     def get_comments(self, obj):
