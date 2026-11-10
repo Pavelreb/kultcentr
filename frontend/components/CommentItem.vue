@@ -3,7 +3,7 @@
   <div :id="`comment-${comment.id}`" class="comment-item py-4 border-b border-gray-100 dark:border-gray-700 last:border-0 scroll-mt-24">
     <div class="flex gap-3">
       <!-- Аватар -->
-      <NuxtLink :to="`/authors/${comment.author_id || 0}`" class="flex-shrink-0">
+      <NuxtLink :to="`/users/${comment.author_id || 0}`" class="flex-shrink-0">
         <img 
           v-if="comment.author_avatar" 
           :src="comment.author_avatar" 
@@ -21,7 +21,7 @@
       <div class="flex-1 min-w-0">
         <!-- Автор и дата -->
         <div class="flex items-center gap-2 flex-wrap">
-          <NuxtLink :to="`/authors/${comment.author_id || 0}`" class="font-semibold text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">
+          <NuxtLink :to="`/users/${comment.author_id || 0}`" class="font-semibold text-gray-800 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition">
             {{ getAuthorFullName(comment) }}
           </NuxtLink>
           <span class="text-xs text-gray-400 dark:text-gray-500">{{ formatDate(comment.created_at) }}</span>

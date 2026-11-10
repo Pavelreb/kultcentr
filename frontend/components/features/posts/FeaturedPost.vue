@@ -41,19 +41,24 @@
           
           <!-- Автор с полным именем -->
           <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-3">
-            <img 
-              v-if="post.author_avatar" 
-              :src="post.author_avatar" 
-              :alt="post.author_name"
-              class="w-6 h-6 rounded-full object-cover border border-gray-200 dark:border-gray-600"
+            <div
+              class="flex items-center gap-2 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              @click.prevent.stop="goToAuthor"
             >
-            <div 
-              v-else
-              class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0"
-            >
-              {{ getInitials(getAuthorFullName()) }}
+              <img 
+                v-if="post.author_avatar" 
+                :src="post.author_avatar" 
+                :alt="post.author_name"
+                class="w-6 h-6 rounded-full object-cover border border-gray-200 dark:border-gray-600"
+              >
+              <div 
+                v-else
+                class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0"
+              >
+                {{ getInitials(getAuthorFullName()) }}
+              </div>
+              <span>{{ getAuthorFullName() }}</span>
             </div>
-            <span>{{ getAuthorFullName() }}</span>
             <span class="text-gray-300 dark:text-gray-600">•</span>
             <span class="flex items-center gap-1">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,6 +149,13 @@ const getAuthorFullName = () => {
   }
   // Fallback - используем username
   return props.post.author_name || 'Автор'
+}
+
+// Переход на страницу автора (стопорим всплытие — клик не должен вести на пост)
+const goToAuthor = () => {
+  if (props.post?.author_id) {
+    navigateTo(`/users/${props.post.author_id}`)
+  }
 }
 
 const getInitials = (name) => {

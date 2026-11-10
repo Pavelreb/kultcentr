@@ -5,6 +5,7 @@ from .models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author_id = serializers.ReadOnlyField(source="author.id")
     author_name = serializers.ReadOnlyField(source="author.username")
     author_first_name = serializers.CharField(
         source="author.first_name", read_only=True
@@ -23,6 +24,7 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "post",
+            "author_id",
             "author_name",
             "author_first_name",  # ✅ НОВОЕ ПОЛЕ
             "author_last_name",  # ✅ НОВОЕ ПОЛЕ
@@ -110,6 +112,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CommentForPostSerializer(serializers.ModelSerializer):
+    author_id = serializers.ReadOnlyField(source="author.id")
     author_name = serializers.ReadOnlyField(source="author.username")
     author_first_name = serializers.CharField(
         source="author.first_name", read_only=True
@@ -127,6 +130,7 @@ class CommentForPostSerializer(serializers.ModelSerializer):
         model = Comment
         fields = [
             "id",
+            "author_id",
             "author_name",
             "author_first_name",  # ✅ НОВОЕ ПОЛЕ
             "author_last_name",  # ✅ НОВОЕ ПОЛЕ

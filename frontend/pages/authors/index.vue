@@ -32,7 +32,7 @@
         <NuxtLink 
           v-for="author in authors" 
           :key="author.id" 
-          :to="`/authors/${author.id}`" 
+          :to="`/users/${author.id}`" 
           class="group bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1"
         >
           <div class="p-5 text-center">

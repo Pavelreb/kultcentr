@@ -6,6 +6,7 @@ from comments.serializers import CommentForPostSerializer
 
 
 class PostSerializer(serializers.ModelSerializer):
+    author_id = serializers.ReadOnlyField(source="author.id")
     author_name = serializers.CharField(source="author.username", read_only=True)
     author_first_name = serializers.CharField(
         source="author.first_name", read_only=True
@@ -28,6 +29,7 @@ class PostSerializer(serializers.ModelSerializer):
             "image",
             "image_url",
             "display_image",
+            "author_id",
             "author_name",
             "author_first_name",  # ✅ НОВОЕ ПОЛЕ
             "author_last_name",  # ✅ НОВОЕ ПОЛЕ
