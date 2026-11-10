@@ -5,12 +5,14 @@
     <div class="flex justify-between items-center mb-6">
       <div class="flex items-center gap-3">
         <div class="w-1 h-8 bg-blue-500 rounded-full"></div>
+        <NuxtLink to="/events" class="hover:opacity-75 transition-opacity">
         <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
           <svg class="w-8 h-8 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2H5zM3 19a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 00-2-2H5a2 2 0 00-2 2v3z"/>
           </svg>
           Афиша
         </h2>
+        </NuxtLink>
         <span 
           v-if="totalItems > 0" 
           class="text-sm text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 rounded-full"
