@@ -67,6 +67,72 @@
         </div>
       </section>
 
+      <!-- Видеоролики -->
+      <section v-if="videos.length > 0" class="mb-10">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+          Видеоролики
+          <span class="text-sm font-normal text-gray-400 dark:text-gray-500">{{ videos.length }}</span>
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
+          <VideoCard v-for="video in videos" :key="video.id" :video="video" />
+        </div>
+      </section>
+
+      <!-- Аудиозаписи -->
+      <section v-if="audios.length > 0" class="mb-10">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+          Аудиозаписи
+          <span class="text-sm font-normal text-gray-400 dark:text-gray-500">{{ audios.length }}</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          <AudioCard v-for="item in audios" :key="item.id" :audio="item" />
+        </div>
+      </section>
+
+      <!-- Клубные формирования -->
+      <section v-if="clubs.length > 0" class="mb-10">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+          Клубные формирования
+          <span class="text-sm font-normal text-gray-400 dark:text-gray-500">{{ clubs.length }}</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          <ClubCard v-for="club in clubs" :key="club.id" :club="club" />
+        </div>
+      </section>
+
+      <!-- Достижения -->
+      <section v-if="achievements.length > 0" class="mb-10">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+          Достижения
+          <span class="text-sm font-normal text-gray-400 dark:text-gray-500">{{ achievements.length }}</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          <AchievementCard v-for="item in achievements" :key="item.id" :achievement="item" />
+        </div>
+      </section>
+
+      <!-- Сотрудники -->
+      <section v-if="staff.length > 0" class="mb-10">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+          Сотрудники
+          <span class="text-sm font-normal text-gray-400 dark:text-gray-500">{{ staff.length }}</span>
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
+          <StaffCard v-for="member in staff" :key="member.id" :member="member" />
+        </div>
+      </section>
+
+      <!-- Документы -->
+      <section v-if="documents.length > 0" class="mb-10">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+          Документы
+          <span class="text-sm font-normal text-gray-400 dark:text-gray-500">{{ documents.length }}</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          <DocumentCard v-for="doc in documents" :key="doc.id" :doc="doc" />
+        </div>
+      </section>
+
       <!-- Авторы -->
       <section v-if="authors.length > 0" class="mb-10">
         <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
@@ -113,6 +179,12 @@
 import PostListItem from '~/components/features/posts/PostListItem.vue'
 import EventListItem from '~/components/features/events/EventListItem.vue'
 import AlbumCard from '~/components/features/albums/AlbumCard.vue'
+import VideoCard from '~/components/features/media/VideoCard.vue'
+import AudioCard from '~/components/features/media/AudioCard.vue'
+import ClubCard from '~/components/features/about/ClubCard.vue'
+import AchievementCard from '~/components/features/about/AchievementCard.vue'
+import StaffCard from '~/components/features/about/StaffCard.vue'
+import DocumentCard from '~/components/features/about/DocumentCard.vue'
 
 const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
@@ -126,10 +198,18 @@ const posts = ref([])
 const events = ref([])
 const albums = ref([])
 const authors = ref([])
+const videos = ref([])
+const audios = ref([])
+const clubs = ref([])
+const achievements = ref([])
+const staff = ref([])
+const documents = ref([])
 const loading = ref(false)
 
 const totalCount = computed(() =>
-  posts.value.length + events.value.length + albums.value.length + authors.value.length
+  posts.value.length + events.value.length + albums.value.length + authors.value.length +
+  videos.value.length + audios.value.length + clubs.value.length +
+  achievements.value.length + staff.value.length + documents.value.length
 )
 
 const getInitials = (user) => {
@@ -149,17 +229,29 @@ const performSearch = async (q) => {
     events.value = []
     albums.value = []
     authors.value = []
+    videos.value = []
+    audios.value = []
+    clubs.value = []
+    achievements.value = []
+    staff.value = []
+    documents.value = []
     return
   }
 
   loading.value = true
   try {
     const params = `?search=${encodeURIComponent(q)}`
-    const [postsRes, eventsRes, albumsRes, usersRes] = await Promise.all([
+    const [postsRes, eventsRes, albumsRes, usersRes, videosRes, audiosRes, clubsRes, achievementsRes, staffRes, documentsRes] = await Promise.all([
       apiFetch(`${API_URL}/posts/${params}`),
       apiFetch(`${API_URL}/events/${params}`),
       apiFetch(`${API_URL}/albums/${params}`),
-      apiFetch(`${API_URL}/auth/users/${params}`)
+      apiFetch(`${API_URL}/auth/users/${params}`),
+      apiFetch(`${API_URL}/medialib/videos/${params}`),
+      apiFetch(`${API_URL}/medialib/audio/${params}`),
+      apiFetch(`${API_URL}/about/clubs/${params}`),
+      apiFetch(`${API_URL}/about/achievements/${params}`),
+      apiFetch(`${API_URL}/about/staff/${params}`),
+      apiFetch(`${API_URL}/about/documents/${params}`)
     ])
 
     posts.value = postsRes.ok ? await postsRes.json() : []
@@ -168,6 +260,12 @@ const performSearch = async (q) => {
     const users = usersRes.ok ? await usersRes.json() : []
     // В поиске показываем только авторов и редакцию, как на странице «Авторы»
     authors.value = users.filter(u => u.role === 'author' || u.role === 'editor')
+    videos.value = videosRes.ok ? await videosRes.json() : []
+    audios.value = audiosRes.ok ? await audiosRes.json() : []
+    clubs.value = clubsRes.ok ? await clubsRes.json() : []
+    achievements.value = achievementsRes.ok ? await achievementsRes.json() : []
+    staff.value = staffRes.ok ? await staffRes.json() : []
+    documents.value = documentsRes.ok ? await documentsRes.json() : []
   } catch (e) {
     console.error('Ошибка поиска:', e)
   } finally {

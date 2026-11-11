@@ -55,3 +55,55 @@
 .carousel-viewport {
     overflow-x: clip;
 }
+/* ============================================ */
+/* Режимы оформления для людей с нарушением     */
+/* цветового зрения и слабовидящих              */
+/* ============================================ */
+
+/* Дальтонизация через SVG feColorMatrix (см. app.vue):
+   цвета по линии конфликта разводятся через третий канал.
+   Фильтр вешается на <html> — fixed-элементы продолжают
+   позиционироваться от вьюпорта. */
+html.theme-protanopia,
+html.theme-deuteranopia,
+html.theme-tritanopia,
+html.theme-contrast {
+    background: #fff;
+}
+
+html.theme-protanopia {
+    filter: url(#daltonize-protanopia);
+}
+
+html.theme-deuteranopia {
+    filter: url(#daltonize-deuteranopia);
+}
+
+html.theme-tritanopia {
+    filter: url(#daltonize-tritanopia);
+}
+
+/* Чёрно-белая максимально контрастная тема */
+html.theme-contrast {
+    filter: grayscale(1) contrast(1.45);
+}
+
+html.theme-contrast body {
+    background: #fff !important;
+    color: #000 !important;
+}
+
+html.theme-contrast a,
+html.theme-contrast button {
+    text-decoration-thickness: 2px;
+}
+
+/* Увеличенные шрифты: Tailwind-сетка на rem масштабируется */
+html.theme-largefont {
+    font-size: 125%;
+}
+
+html.theme-largefont body {
+    line-height: 1.75;
+    letter-spacing: 0.015em;
+}
