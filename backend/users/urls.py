@@ -7,6 +7,7 @@ from .views import (
     RegisterView,
     UserDetailView,
     UserListView,
+    SubscribeView,
     CurrentUserView,
     CurrentUserUpdateView,
     ChangePasswordView,
@@ -20,6 +21,7 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("users/", UserListView.as_view(), name="user_list"),
     path("users/<int:pk>/", UserDetailView.as_view(), name="user_detail"),
+    path("users/<int:pk>/subscribe/", SubscribeView.as_view(), name="subscribe"),
     path("users/me/", CurrentUserView.as_view(), name="current_user"),
     path(
         "users/me/update/", CurrentUserUpdateView.as_view(), name="current_user_update"

@@ -21,7 +21,7 @@
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 mb-8">
         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           <!-- Аватар -->
-          <div class="w-28 h-28 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-4xl font-bold overflow-hidden flex-shrink-0 shadow-lg">
+          <div class="relative w-28 h-28 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-4xl font-bold overflow-hidden flex-shrink-0 shadow-lg">
             <img v-if="user.avatar_url" :src="user.avatar_url" :alt="user.username" class="w-full h-full object-cover" />
             <span v-else>{{ getInitials(user) }}</span>
           </div>
@@ -36,6 +36,19 @@
                 :class="roleBadgeClass"
               >
                 {{ user.role_display }}
+              </span>
+              <!-- Онлайн-статус -->
+              <span
+                class="inline-flex items-center gap-1.5 self-center px-3 py-1 rounded-full text-xs font-medium"
+                :class="user.is_online
+                  ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'"
+              >
+                <span
+                  class="w-2 h-2 rounded-full"
+                  :class="user.is_online ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'"
+                ></span>
+                {{ user.is_online ? 'В сети' : 'Не в сети' }}
               </span>
             </div>
             <p class="text-gray-400 dark:text-gray-500 text-sm mt-1">@{{ user.username }}</p>
@@ -63,10 +76,44 @@
               </a>
               <span class="flex items-center gap-1.5">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Подписчиков: {{ user.subscribers_count || 0 }}
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
                 На сайте с {{ formatDate(user.date_joined) }}
               </span>
+            </div>
+
+            <!-- Кнопка подписки (только для авторов/редакторов, не для себя) -->
+            <div v-if="isCreator && !isSelf" class="mt-4 flex justify-center sm:justify-start">
+              <button
+                v-if="authStore.isAuthenticated"
+                @click="toggleSubscribe"
+                :disabled="subscribing"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 disabled:opacity-50"
+                :class="user.is_subscribed
+                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg shadow-blue-500/25 hover:-translate-y-0.5'"
+              >
+                <svg v-if="user.is_subscribed" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                </svg>
+                {{ subscribing ? 'Подождите...' : user.is_subscribed ? 'Вы подписаны' : 'Подписаться' }}
+              </button>
+              <NuxtLink
+                v-else
+                to="/auth/login"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg shadow-blue-500/25 transition-all duration-300 hover:-translate-y-0.5"
+              >
+                Войдите, чтобы подписаться
+              </NuxtLink>
             </div>
 
             <!-- Социальные сети пользователя (если разрешил показ) -->
@@ -152,6 +199,7 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '~/store/auth'
 import PostCard from '~/components/features/posts/PostCard.vue'
 
 const config = useRuntimeConfig()
@@ -159,11 +207,34 @@ const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
 
 const { apiFetch } = useApi()
 const route = useRoute()
+const authStore = useAuthStore()
 
 const user = ref(null)
 const posts = ref([])
 const loading = ref(true)
 const postsLoading = ref(false)
+const subscribing = ref(false)
+
+const isSelf = computed(() => authStore.user?.id === user.value?.id)
+
+const toggleSubscribe = async () => {
+  if (subscribing.value) return
+  subscribing.value = true
+  try {
+    const res = await apiFetch(`${API_URL}/auth/users/${user.value.id}/subscribe/`, {
+      method: 'POST'
+    })
+    if (res.ok) {
+      const data = await res.json()
+      user.value.is_subscribed = data.subscribed
+      user.value.subscribers_count = data.subscribers_count
+    }
+  } catch (e) {
+    console.error('Ошибка:', e)
+  } finally {
+    subscribing.value = false
+  }
+}
 
 const breadcrumbItems = computed(() => [
   { label: user.value ? (user.value.full_name || user.value.username) : 'Профиль' }
@@ -206,6 +277,7 @@ useHead(() => ({
 }))
 
 onMounted(async () => {
+  authStore.restoreAuth()
   try {
     const userId = route.params.id
 

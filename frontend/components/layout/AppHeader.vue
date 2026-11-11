@@ -14,6 +14,7 @@
       
       <!-- Правая часть: Создать + Переключатель темы + Кнопки пользователя -->
       <div class="flex items-center gap-2 md:gap-4">
+        <NotificationBell />
         <CreateMenu />
         <!-- На мобильных (<640px) скрыто — эти действия живут в бургер-меню -->
         <div class="hidden sm:flex items-center gap-2 md:gap-4">
@@ -32,4 +33,5 @@ import ThemeToggle from '~/components/common/ThemeToggle.vue'
 import AuthButtons from '~/components/common/AuthButtons.vue'
 import CreateMenu from '~/components/common/CreateMenu.vue'
 import SearchBar from '~/components/common/SearchBar.vue'
+import NotificationBell from '~/components/common/NotificationBell.vue'
 </script>

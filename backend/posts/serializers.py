@@ -14,6 +14,23 @@ from .models import (
 from comments.serializers import CommentForPostSerializer
 
 
+def _notify_subscribers_new_post(post):
+    """Уведомить подписчиков автора о новой публикации"""
+    from notifications.models import notify
+
+    author_name = (
+        f"{post.author.last_name} {post.author.first_name}".strip()
+        or post.author.username
+    )
+    for sub in post.author.subscribers.select_related("subscriber"):
+        notify(
+            sub.subscriber,
+            "new_post",
+            f"{author_name} опубликовал новую публикацию «{post.title[:60]}»",
+            f"/posts/{post.id}",
+        )
+
+
 def build_poll_data(post, request):
     """Собирает данные голосования для ответа API"""
     try:
@@ -287,6 +304,8 @@ class PostSerializer(serializers.ModelSerializer):
             _save_poll(post, poll_data)
         if quiz_data is not None:
             _save_quiz(post, quiz_data)
+        if post.is_published:
+            _notify_subscribers_new_post(post)
         return post
 
     def update(self, instance, validated_data):
@@ -298,11 +317,14 @@ class PostSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {"detail": "Голосования и тесты могут изменять только редакторы"}
                 )
+        was_published = instance.is_published
         post = super().update(instance, validated_data)
         if poll_data != "__keep__":
             _save_poll(post, poll_data)
         if quiz_data != "__keep__":
             _save_quiz(post, quiz_data)
+        if post.is_published and not was_published:
+            _notify_subscribers_new_post(post)
         return post
 
     def to_representation(self, instance):

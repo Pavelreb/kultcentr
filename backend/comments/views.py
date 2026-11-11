@@ -24,8 +24,28 @@ class CommentViewSet(viewsets.ModelViewSet):
 
             raise ValidationError({"post": "Это поле обязательно"})
         post = Post.objects.get(id=post_id)
-        serializer.save(author=self.request.user, post=post)
+        comment = serializer.save(author=self.request.user, post=post)
         print(f"💬 Создан комментарий к посту: {serializer.instance.content[:30]}...")
+
+        # Уведомления: автору поста и/или автору родительского комментария
+        from notifications.models import notify
+
+        if comment.parent and comment.parent.author != self.request.user:
+            notify(
+                comment.parent.author,
+                "reply",
+                f"{self.request.user.username} ответил на ваш комментарий",
+                f"/posts/{post.id}#comment-{comment.id}",
+            )
+        if post.author != self.request.user and (
+            not comment.parent or comment.parent.author != post.author
+        ):
+            notify(
+                post.author,
+                "comment",
+                f"{self.request.user.username} прокомментировал вашу публикацию «{post.title[:50]}»",
+                f"/posts/{post.id}#comment-{comment.id}",
+            )
 
     def get_queryset(self):
         queryset = super().get_queryset()

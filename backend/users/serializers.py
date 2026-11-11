@@ -55,8 +55,10 @@ class UserSerializer(serializers.ModelSerializer):
     role_display = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
     avatar_url = serializers.SerializerMethodField()
-    posts_count = serializers.SerializerMethodField()  # ✅ НОВОЕ ПОЛЕ
-    subscribers_count = serializers.SerializerMethodField()  # ✅ НОВОЕ ПОЛЕ (заглушка)
+    posts_count = serializers.SerializerMethodField()
+    subscribers_count = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField()
+    is_online = serializers.SerializerMethodField()
     total_views = serializers.SerializerMethodField()
     total_likes = serializers.SerializerMethodField()
     total_comments = serializers.SerializerMethodField()
@@ -80,7 +82,9 @@ class UserSerializer(serializers.ModelSerializer):
             "avatar",
             "avatar_url",
             "posts_count",
-            "subscribers_count",  # ✅ ДОБАВЛЯЕМ
+            "subscribers_count",
+            "is_subscribed",
+            "is_online",
             "phone",
             "vk",
             "max",
@@ -146,9 +150,19 @@ class UserSerializer(serializers.ModelSerializer):
         return Post.objects.filter(author=obj, is_published=True).count()
 
     def get_subscribers_count(self, obj):
-        """Количество подписчиков (заглушка, можно реализовать позже)"""
-        # TODO: Добавить модель подписок
-        return 0
+        """Количество подписчиков"""
+        return obj.subscribers.count()
+
+    def get_is_subscribed(self, obj):
+        """Подписан ли текущий пользователь на этого автора"""
+        request = self.context.get("request")
+        if not request or not request.user.is_authenticated:
+            return False
+        return obj.subscribers.filter(subscriber=request.user).exists()
+
+    def get_is_online(self, obj):
+        """Пользователь в сети (активен в последние 5 минут)"""
+        return obj.is_online
 
     def get_total_views(self, obj):
         """Суммарные просмотры опубликованных постов пользователя"""
