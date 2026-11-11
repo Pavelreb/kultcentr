@@ -7,3 +7,4 @@ pillow==12.3.0
 PyJWT==2.15.1
 sqlparse==0.6.1
 tzdata==2026.6
+imageio-ffmpeg==0.8.1

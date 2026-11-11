@@ -46,6 +46,24 @@
           :loading="albumsLoading"
           :items-per-page="5"
         />
+
+        <!-- ========================================== -->
+        <!-- 5. БЛОК ВИДЕОРОЛИКОВ                      -->
+        <!-- ========================================== -->
+        <VideoSection
+          :videos="videos"
+          :loading="videosLoading"
+          :items-per-page="5"
+        />
+
+        <!-- ========================================== -->
+        <!-- 6. БЛОК АУДИОЗАПИСЕЙ                      -->
+        <!-- ========================================== -->
+        <AudioSection
+          :audios="audios"
+          :loading="audiosLoading"
+          :items-per-page="6"
+        />
         
       </div>
     </div>
@@ -66,6 +84,8 @@ import EventSection from '~/components/features/events/EventSection.vue'
 import PostSection from '~/components/features/posts/PostSection.vue'
 import AuthorSection from '~/components/features/authors/AuthorSection.vue'
 import AlbumSection from '~/components/features/albums/AlbumSection.vue'
+import VideoSection from '~/components/features/media/VideoSection.vue'
+import AudioSection from '~/components/features/media/AudioSection.vue'
 
 const config = useRuntimeConfig()
 const API_URL = config.public.apiBase || 'http://127.0.0.1:8000/api'
@@ -111,6 +131,18 @@ const authorsLoading = ref(true)
 // ============================================
 const albums = ref([])
 const albumsLoading = ref(true)
+
+// ============================================
+// 6. ВИДЕОРОЛИКИ
+// ============================================
+const videos = ref([])
+const videosLoading = ref(true)
+
+// ============================================
+// 7. АУДИОЗАПИСИ
+// ============================================
+const audios = ref([])
+const audiosLoading = ref(true)
 
 // ============================================
 // ЗАГРУЗКА ДАННЫХ
@@ -207,6 +239,38 @@ const loadAlbums = async () => {
   }
 }
 
+const loadVideos = async () => {
+  try {
+    const res = await apiFetch('/medialib/videos/')
+    if (res.ok) {
+      videos.value = await res.json()
+    } else {
+      videos.value = []
+    }
+  } catch (e) {
+    console.error('Ошибка загрузки видеороликов:', e)
+    videos.value = []
+  } finally {
+    videosLoading.value = false
+  }
+}
+
+const loadAudios = async () => {
+  try {
+    const res = await apiFetch('/medialib/audio/')
+    if (res.ok) {
+      audios.value = await res.json()
+    } else {
+      audios.value = []
+    }
+  } catch (e) {
+    console.error('Ошибка загрузки аудиозаписей:', e)
+    audios.value = []
+  } finally {
+    audiosLoading.value = false
+  }
+}
+
 // ============================================
 // ЖИЗНЕННЫЙ ЦИКЛ
 // ============================================
@@ -221,7 +285,9 @@ onMounted(async () => {
     loadEvents(),
     loadPosts(),
     loadAuthors(),
-    loadAlbums()
+    loadAlbums(),
+    loadVideos(),
+    loadAudios()
   ])
 })
 </script>

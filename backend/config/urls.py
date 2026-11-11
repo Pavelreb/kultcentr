@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-from django.conf.urls.static import static
+
+from config.media_serve import serve_media_range
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -18,7 +19,11 @@ urlpatterns = [
     path("api/about/", include("about.urls")),
     path("api/", include("feedback.urls")),
     path("api/notifications/", include("notifications.urls")),
+    path("api/medialib/", include("medialib.urls")),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Раздача медиа с поддержкой Range (перемотка видео/аудио в браузере)
+    urlpatterns += [
+        path(settings.MEDIA_URL.lstrip("/") + "<path:path>", serve_media_range)
+    ]
