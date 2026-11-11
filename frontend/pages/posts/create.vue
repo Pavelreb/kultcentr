@@ -66,13 +66,12 @@
             Содержание
             <span class="text-red-500">*</span>
           </label>
-          <textarea 
+          <RichTextEditor
             v-model="content"
             placeholder="Текст поста..."
-            rows="10"
-            class="w-full border border-gray-300 dark:border-gray-600 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-            required
-          ></textarea>
+            :rows="10"
+            :required="true"
+          />
         </div>
         
         <!-- Изображение -->
@@ -140,6 +139,12 @@
           </button>
         </div>
         
+        <!-- Голосование (только редакторы) -->
+        <PollEditor v-if="authStore.isEditor" v-model="pollData" />
+        
+        <!-- Тест (только редакторы) -->
+        <QuizEditor v-if="authStore.isEditor" v-model="quizData" />
+        
         <!-- Статус публикации -->
         <div>
           <label class="block text-gray-700 dark:text-gray-300 mb-2 text-sm font-medium">Статус публикации</label>
@@ -201,6 +206,9 @@
 
 <script setup>
 import { useAuthStore } from '~/store/auth'
+import RichTextEditor from '~/components/common/RichTextEditor.vue'
+import PollEditor from '~/components/features/posts/PollEditor.vue'
+import QuizEditor from '~/components/features/posts/QuizEditor.vue'
 
 definePageMeta({
   middleware: 'auth'
@@ -223,6 +231,8 @@ const imageFile = ref(null)
 const imageUrl = ref('')
 const imagePreview = ref('')
 const is_published = ref(true)
+const pollData = ref(null)
+const quizData = ref(null)
 
 // Валидация URL
 const isValidUrl = (string) => {
@@ -296,18 +306,22 @@ const createPost = async () => {
       finalImageUrl = imageUrl.value
     }
     
+    const body = {
+      title: title.value,
+      excerpt: excerpt.value,
+      content: content.value,
+      image_url: finalImageUrl,
+      is_published: is_published.value
+    }
+    if (pollData.value) body.poll = pollData.value
+    if (quizData.value) body.quiz = quizData.value
+    
     const res = await apiFetch(`${API_URL}/posts/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        title: title.value,
-        excerpt: excerpt.value,
-        content: content.value,
-        image_url: finalImageUrl,
-        is_published: is_published.value
-      })
+      body: JSON.stringify(body)
     })
     
     if (res.ok) {
@@ -315,7 +329,7 @@ const createPost = async () => {
       router.push(`/posts/${post.id}`)
     } else {
       const data = await res.json()
-      error.value = data.detail || 'Ошибка создания поста'
+      error.value = data.detail || data.poll || data.quiz || 'Ошибка создания поста'
     }
   } catch (e) {
     console.error('Ошибка:', e)

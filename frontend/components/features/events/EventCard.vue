@@ -69,7 +69,7 @@
       
       <!-- Описание -->
       <p class="text-sm text-white/80 mt-1.5 line-clamp-2 drop-shadow-md font-light">
-        {{ event.excerpt || event.content?.substring(0, 80) }}...
+        <RichText :text="event.excerpt || event.content || ''" compact />
       </p>
       
       <!-- Разделитель с градиентом -->
@@ -116,6 +116,7 @@
 </template>
 
 <script setup>
+import RichText from '~/components/common/RichText.vue'
 const props = defineProps({
   event: {
     type: Object,

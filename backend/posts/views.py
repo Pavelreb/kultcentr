@@ -261,3 +261,173 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+    @action(detail=True, methods=["post"], url_path="poll/vote")
+    def poll_vote(self, request, pk=None):
+        """Проголосовать (один пользователь — один голос)"""
+        from .models import Poll, PollOption, PollVote
+        from .serializers import build_poll_data
+
+        user = request.user
+        if not user.is_authenticated:
+            return Response({"detail": "Не авторизован"}, status=401)
+
+        post = get_object_or_404(Post, pk=pk)
+        poll = Poll.objects.filter(post=post).first()
+        if not poll:
+            return Response({"detail": "У поста нет голосования"}, status=404)
+
+        option_id = request.data.get("option_id")
+        option = poll.options.filter(pk=option_id).first()
+        if not option:
+            return Response({"detail": "Вариант не найден"}, status=400)
+
+        if poll.votes.filter(user=user).exists():
+            return Response({"detail": "Вы уже голосовали"}, status=400)
+
+        PollVote.objects.create(poll=poll, option=option, user=user)
+        return Response(build_poll_data(post, request))
+
+    @action(detail=True, methods=["post"], url_path="quiz/submit")
+    def quiz_submit(self, request, pk=None):
+        """Отправить прохождение теста (один раз на пользователя)"""
+        from .models import Quiz, QuizAttempt
+        from .serializers import build_quiz_data
+
+        user = request.user
+        if not user.is_authenticated:
+            return Response({"detail": "Не авторизован"}, status=401)
+
+        post = get_object_or_404(Post, pk=pk)
+        quiz = Quiz.objects.filter(post=post).first()
+        if not quiz:
+            return Response({"detail": "У поста нет теста"}, status=404)
+
+        if quiz.attempts.filter(user=user).exists():
+            return Response(
+                {"detail": "Вы уже проходили этот тест"}, status=400
+            )
+
+        answers = request.data.get("answers", {})
+        if not isinstance(answers, dict):
+            return Response({"detail": "Неверный формат ответов"}, status=400)
+
+        questions = list(quiz.questions.prefetch_related("answers"))
+        if not questions:
+            return Response({"detail": "В тесте нет вопросов"}, status=400)
+
+        score = 0
+        saved_answers = {}
+        for q in questions:
+            answer_id = answers.get(str(q.id)) or answers.get(q.id)
+            try:
+                answer_id = int(answer_id)
+            except (TypeError, ValueError):
+                return Response(
+                    {"detail": "Ответьте на все вопросы"}, status=400
+                )
+            answer = q.answers.filter(pk=answer_id).first()
+            if not answer:
+                return Response(
+                    {"detail": "Ответ не найден"}, status=400
+                )
+            saved_answers[str(q.id)] = answer_id
+            if answer.is_correct:
+                score += 1
+
+        QuizAttempt.objects.create(
+            quiz=quiz,
+            user=user,
+            score=score,
+            total=len(questions),
+            answers=saved_answers,
+        )
+        return Response(build_quiz_data(post, request))
+
+    @action(detail=False, methods=["get"], url_path="stats")
+    def stats(self, request):
+        """Статистика голосований и тестов (только для редакторов)"""
+        from .models import Poll, Quiz
+
+        user = request.user
+        if not user.is_authenticated or user.role != "editor":
+            return Response({"detail": "Доступ запрещён"}, status=403)
+
+        def user_label(u):
+            parts = [u.last_name, u.first_name]
+            name = " ".join(p for p in parts if p)
+            return name or u.username
+
+        polls_data = []
+        for poll in (
+            Poll.objects.select_related("post")
+            .prefetch_related("options__votes__user")
+            .order_by("-created_at")
+        ):
+            options = []
+            total_votes = 0
+            for o in poll.options.all():
+                votes = o.votes.count()
+                total_votes += votes
+                options.append(
+                    {
+                        "id": o.id,
+                        "text": o.text,
+                        "votes": votes,
+                        "voters": [
+                            {"name": user_label(v.user), "voted_at": v.created_at}
+                            for v in o.votes.all()
+                        ],
+                    }
+                )
+            polls_data.append(
+                {
+                    "id": poll.id,
+                    "post_id": poll.post_id,
+                    "post_title": poll.post.title,
+                    "question": poll.question,
+                    "total_votes": total_votes,
+                    "options": options,
+                    "created_at": poll.created_at,
+                }
+            )
+
+        quizzes_data = []
+        for quiz in (
+            Quiz.objects.select_related("post")
+            .prefetch_related("attempts__user", "questions")
+            .order_by("-created_at")
+        ):
+            attempts = [
+                {
+                    "name": user_label(a.user),
+                    "score": a.score,
+                    "total": a.total,
+                    "created_at": a.created_at,
+                }
+                for a in quiz.attempts.all()
+            ]
+            avg_percent = (
+                round(
+                    sum(a["score"] / a["total"] for a in attempts if a["total"])
+                    / len(attempts)
+                    * 100
+                )
+                if attempts
+                else None
+            )
+            quizzes_data.append(
+                {
+                    "id": quiz.id,
+                    "post_id": quiz.post_id,
+                    "post_title": quiz.post.title,
+                    "title": quiz.title,
+                    "questions_count": quiz.questions.count(),
+                    "attempts_count": len(attempts),
+                    "avg_percent": avg_percent,
+                    "attempts": attempts,
+                    "created_at": quiz.created_at,
+                }
+            )
+
+        return Response({"polls": polls_data, "quizzes": quizzes_data})

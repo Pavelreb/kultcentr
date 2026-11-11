@@ -140,10 +140,26 @@
         
         <!-- Контент поста -->
         <div class="prose prose-lg dark:prose-invert max-w-none">
-          <div class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
-            {{ post.content }}
-          </div>
+          <RichText :text="post.content" />
         </div>
+        
+        <!-- Голосование -->
+        <PollBlock
+          v-if="post.poll"
+          :post-id="post.id"
+          :poll="post.poll"
+          @updated="(data) => { post.poll = data }"
+          @deleted="post.poll = null"
+        />
+        
+        <!-- Тест -->
+        <QuizBlock
+          v-if="post.quiz"
+          :post-id="post.id"
+          :quiz="post.quiz"
+          @updated="(data) => { post.quiz = data }"
+          @deleted="post.quiz = null"
+        />
         
         <!-- Статистика -->
         <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700 flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400">
@@ -228,6 +244,9 @@
 <script setup>
 import { useAuthStore } from '~/store/auth'
 import PostComments from '~/components/features/posts/PostComments.vue'
+import PollBlock from '~/components/features/posts/PollBlock.vue'
+import QuizBlock from '~/components/features/posts/QuizBlock.vue'
+import RichText from '~/components/common/RichText.vue'
 
 const authStore = useAuthStore()
 const { apiFetch } = useApi()

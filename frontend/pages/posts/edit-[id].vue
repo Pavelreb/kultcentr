@@ -80,13 +80,12 @@
             Содержание
             <span class="text-red-500">*</span>
           </label>
-          <textarea 
+          <RichTextEditor
             v-model="form.content"
             placeholder="Текст поста..."
-            rows="10"
-            class="w-full border border-gray-300 dark:border-gray-600 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-            required
-          ></textarea>
+            :rows="10"
+            :required="true"
+          />
         </div>
         
         <!-- Изображение -->
@@ -174,6 +173,25 @@
           </button>
         </div>
         
+        <!-- Голосование (только редакторы) -->
+        <PollEditor v-if="authStore.isEditor" v-model="pollData" />
+        
+        <!-- Тест (только редакторы) -->
+        <QuizEditor v-if="authStore.isEditor" v-model="quizData" />
+        
+        <!-- Предупреждение о сбросе результатов -->
+        <div
+          v-if="authStore.isEditor && (pollData || quizData)"
+          class="flex items-start gap-3 p-4 rounded-xl border-2 border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20"
+        >
+          <svg class="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <p class="text-base font-bold text-red-600 dark:text-red-400">
+            ВНИМАНИЕ: сохранение этого поста полностью сбросит результаты голосования и теста — все голоса и прохождения будут удалены!
+          </p>
+        </div>
+        
         <!-- Статус публикации -->
         <div>
           <label class="block text-gray-700 dark:text-gray-300 mb-2 text-sm font-medium">Статус публикации</label>
@@ -246,6 +264,9 @@
 
 <script setup>
 import { useAuthStore } from '~/store/auth'
+import RichTextEditor from '~/components/common/RichTextEditor.vue'
+import PollEditor from '~/components/features/posts/PollEditor.vue'
+import QuizEditor from '~/components/features/posts/QuizEditor.vue'
 
 definePageMeta({
   middleware: 'auth'
@@ -284,6 +305,8 @@ const form = ref({
 const imageFile = ref(null)
 const imageUrl = ref('')
 const imagePreview = ref('')
+const pollData = ref(null)
+const quizData = ref(null)
 
 // Валидация URL
 const isValidUrl = (string) => {
@@ -355,6 +378,29 @@ onMounted(async () => {
         image_url: data.image_url || '',
         is_published: data.is_published || false
       }
+      
+      // Голосование: приводим варианты к строкам для редактора
+      if (data.poll) {
+        pollData.value = {
+          question: data.poll.question || '',
+          options: (data.poll.options || []).map((o) => o.text)
+        }
+      }
+      
+      // Тест: структура совпадает с редактором (id лишними не будут)
+      if (data.quiz) {
+        quizData.value = {
+          title: data.quiz.title || '',
+          description: data.quiz.description || '',
+          questions: (data.quiz.questions || []).map((q) => ({
+            text: q.text,
+            answers: (q.answers || []).map((a) => ({
+              text: a.text,
+              is_correct: !!a.is_correct
+            }))
+          }))
+        }
+      }
     } else {
       errorMessage.value = 'Пост не найден'
     }
@@ -403,18 +449,25 @@ const updatePost = async () => {
       finalImageUrl = imageUrl.value
     }
     
+    const body = {
+      title: form.value.title,
+      excerpt: form.value.excerpt,
+      content: form.value.content,
+      image_url: finalImageUrl,
+      is_published: form.value.is_published
+    }
+    // Голосование и тест отправляем только редакторы (null = удалить)
+    if (authStore.isEditor) {
+      body.poll = pollData.value
+      body.quiz = quizData.value
+    }
+    
     const res = await apiFetch(`${API_URL}/posts/${postId.value}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        title: form.value.title,
-        excerpt: form.value.excerpt,
-        content: form.value.content,
-        image_url: finalImageUrl,
-        is_published: form.value.is_published
-      })
+      body: JSON.stringify(body)
     })
     
     if (res.ok) {
@@ -422,7 +475,7 @@ const updatePost = async () => {
       router.push(`/posts/${post.id}`)
     } else {
       const data = await res.json()
-      submitError.value = data.detail || 'Ошибка обновления'
+      submitError.value = data.detail || data.poll || data.quiz || 'Ошибка обновления'
     }
   } catch (e) {
     console.error('Ошибка:', e)

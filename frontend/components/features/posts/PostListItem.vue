@@ -57,7 +57,7 @@
       </div>
       
       <p class="text-gray-600 dark:text-gray-400 text-sm mt-2 line-clamp-3">
-        {{ post.excerpt || post.content?.substring(0, 120) }}...
+        <RichText :text="post.excerpt || post.content || ''" compact />
       </p>
       
       <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
@@ -94,6 +94,8 @@
 </template>
 
 <script setup>
+import RichText from '~/components/common/RichText.vue'
+
 const props = defineProps({
   post: {
     type: Object,
