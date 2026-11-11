@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "banner",
     "gallery",
     "about",
+    "feedback",
 ]
 
 MIDDLEWARE = [

@@ -158,6 +158,11 @@
           <DocumentCard v-for="d in documents.slice(0, 6)" :key="d.id" :doc="d" />
         </div>
       </section>
+
+      <!-- Обратная связь -->
+      <section class="mt-10">
+        <FeedbackForm />
+      </section>
     </div>
   </div>
 </template>
@@ -167,6 +172,7 @@ import StaffCard from '~/components/features/about/StaffCard.vue'
 import ClubCard from '~/components/features/about/ClubCard.vue'
 import AchievementCard from '~/components/features/about/AchievementCard.vue'
 import DocumentCard from '~/components/features/about/DocumentCard.vue'
+import FeedbackForm from '~/components/common/FeedbackForm.vue'
 
 useSeoMeta({
   title: 'Об учреждении',
