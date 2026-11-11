@@ -42,7 +42,7 @@
         
         <!-- Описание -->
         <p class="text-gray-600 dark:text-gray-300 text-sm mt-1.5 line-clamp-2">
-          {{ event.excerpt || event.content?.substring(0, 120) }}...
+          <RichText :text="event.excerpt || event.content || ''" compact />
         </p>
         
         <!-- Детали -->
@@ -88,6 +88,7 @@
 </template>
 
 <script setup>
+import RichText from '~/components/common/RichText.vue'
 const props = defineProps({
   event: {
     type: Object,

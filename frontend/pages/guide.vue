@@ -44,6 +44,9 @@
       <a href="#guide-achievements" class="px-4 py-2 text-sm font-medium rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition">
         Достижения
       </a>
+      <a href="#guide-content" class="px-4 py-2 text-sm font-medium rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300 hover:bg-rose-200 dark:hover:bg-rose-900/50 transition">
+        Текст, голосования и тесты
+      </a>
     </div>
 
     <!-- ======== Афиши ======== -->
@@ -331,6 +334,81 @@
         <li>Подходят фото награждения, сканы дипломов и грамот, кубки и медали.</li>
         <li>Если изображение не загружено, вместо него показывается заглушка-иконка.</li>
       </ul>
+    </section>
+
+    <!-- ======== Текст, голосования и тесты ======== -->
+    <section id="guide-content" class="scroll-mt-24 bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 p-6 mt-8">
+      <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-4">
+        <svg class="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+        </svg>
+        Текст, голосования и тесты
+      </h2>
+
+      <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Форматирование текста</h3>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+        Поле «Содержание» публикации и «Полное описание» афиши поддерживают форматирование. Над полем есть панель с кнопками: выделите текст и нажмите кнопку — разметка подставится сама. Можно писать разметку и вручную:
+      </p>
+      <div class="overflow-x-auto mb-5">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide border-b border-gray-100 dark:border-gray-700">
+              <th class="py-2 pr-4 font-medium">Как написать</th>
+              <th class="py-2 font-medium">Что получится</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            <tr><td class="py-2 pr-4 text-gray-800 dark:text-gray-200 font-mono text-xs">**важный текст**</td><td class="py-2 text-gray-800 dark:text-gray-200"><b>важный текст</b></td></tr>
+            <tr><td class="py-2 pr-4 text-gray-800 dark:text-gray-200 font-mono text-xs">*наклонный текст*</td><td class="py-2 text-gray-800 dark:text-gray-200"><i>наклонный текст</i></td></tr>
+            <tr><td class="py-2 pr-4 text-gray-800 dark:text-gray-200 font-mono text-xs">[название](https://site.ru)</td><td class="py-2 text-gray-800 dark:text-gray-200"><span class="text-blue-600 dark:text-blue-400 underline">название</span> — ссылка, откроется в новой вкладке</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-800 dark:text-gray-200 font-mono text-xs">- первый пункт<br>- второй пункт</td><td class="py-2 text-gray-800 dark:text-gray-200">маркированный список</td></tr>
+            <tr><td class="py-2 pr-4 text-gray-800 dark:text-gray-200 font-mono text-xs">1. первый шаг<br>2. второй шаг</td><td class="py-2 text-gray-800 dark:text-gray-200">нумерованный список</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc pl-5 mb-6">
+        <li>Каждый список пишется с новой строки; пустая строка заканчивает список и начинает новый абзац.</li>
+        <li>Ссылка должна начинаться с <span class="font-mono text-xs">http://</span> или <span class="font-mono text-xs">https://</span>.</li>
+        <li>Форматирование работает и в карточках на главной и в списках — текст там показывается уже оформленным.</li>
+      </ul>
+
+      <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Голосование в публикации (только редакторы)</h3>
+      <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc pl-5 mb-4">
+        <li>Создавать и изменять голосования могут <b>только редакторы</b> — в форме публикации включите галочку <b>«Добавить голосование»</b>.</li>
+        <li>Заполните <b>вопрос</b> и минимум <b>2 варианта ответа</b>; кнопка «Добавить вариант» добавляет ещё.</li>
+        <li>Каждый <b>зарегистрированный</b> пользователь может проголосовать <b>только один раз</b>; после голоса видны результаты с процентами. Незарегистрированным предлагается войти.</li>
+        <li>Удалить голосование может только редактор (кнопка корзины на блоке) — все голоса при этом стираются.</li>
+      </ul>
+
+      <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Тест в публикации (только редакторы)</h3>
+      <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 list-disc pl-5 mb-4">
+        <li>Создавать и изменять тесты могут <b>только редакторы</b> — включите галочку <b>«Добавить тест»</b>, укажите название (обязательно) и описание (по желанию).</li>
+        <li>Добавьте вопросы. У каждого вопроса минимум 2 ответа, и ровно один из них отметьте переключателем как <b>правильный</b>.</li>
+        <li>Любой <b>зарегистрированный</b> пользователь проходит тест <b>один раз</b>: кнопка «Завершить тест» активна, когда выбран ответ на каждый вопрос. Незарегистрированным предлагается войти.</li>
+        <li>После прохождения показывается результат (например, 7 из 10) и разбор: правильные ответы подсвечены зелёным, ошибки пользователя — красным.</li>
+        <li>Удалить тест может только редактор — результаты всех прохождений при этом стираются.</li>
+      </ul>
+
+      <!-- Большое предупреждение -->
+      <div class="flex items-start gap-3 p-4 mb-6 rounded-xl border-2 border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20">
+        <svg class="w-8 h-8 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+        <div>
+          <p class="text-lg font-extrabold text-red-600 dark:text-red-400 uppercase tracking-wide mb-1">Внимание!</p>
+          <p class="text-base font-bold text-red-600 dark:text-red-400">
+            Если отредактировать и сохранить пост с голосованием или тестом — все результаты СБРОСЯТСЯ: голоса и прохождения пользователей будут удалены безвозвратно.
+          </p>
+          <p class="text-sm text-red-500 dark:text-red-400 mt-1">
+            Перед правкой такого поста убедитесь, что голосование/тест завершены, либо сначала сохраните нужные данные со страницы «Статистика».
+          </p>
+        </div>
+      </div>
+
+      <h3 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Статистика (только для редакторов)</h3>
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        Раздел <b>«Управление → Статистика»</b> в главном меню показывает по каждому голосованию распределение голосов и список проголосовавших, а по каждому тесту — число прохождений, средний результат и таблицу: кто, когда и на сколько процентов прошёл тест.
+      </p>
     </section>
     </template>
   </div>

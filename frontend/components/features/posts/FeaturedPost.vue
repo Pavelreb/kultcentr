@@ -70,7 +70,7 @@
           
           <!-- Описание -->
           <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed mb-4 line-clamp-3">
-            {{ post.excerpt || post.content?.substring(0, 200) }}...
+            <RichText :text="post.excerpt || post.content || ''" compact />
           </p>
           
           <!-- Статистика -->
@@ -115,6 +115,8 @@
 </template>
 
 <script setup>
+import RichText from '~/components/common/RichText.vue'
+
 const props = defineProps({
   post: {
     type: Object,

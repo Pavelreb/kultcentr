@@ -35,9 +35,7 @@
           
           <!-- Описание -->
           <div class="prose prose-sm dark:prose-invert max-w-none mb-6">
-            <p class="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
-              {{ event.content }}
-            </p>
+            <RichText :text="event.content" />
           </div>
           
           <!-- Детали события (увеличенные) -->
@@ -138,6 +136,7 @@
 </template>
 
 <script setup>
+import RichText from '~/components/common/RichText.vue'
 import { useAuthStore } from '~/store/auth'
 
 const authStore = useAuthStore()

@@ -66,13 +66,12 @@
             Полное описание
             <span class="text-red-500">*</span>
           </label>
-          <textarea 
+          <RichTextEditor
             v-model="content"
             placeholder="Подробное описание события..."
-            rows="6"
-            class="w-full border border-gray-300 dark:border-gray-600 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-            required
-          ></textarea>
+            :rows="6"
+            :required="true"
+          />
         </div>
         
         <!-- Дата, время и место -->
@@ -238,6 +237,7 @@
 
 <script setup>
 import { useAuthStore } from '~/store/auth'
+import RichTextEditor from '~/components/common/RichTextEditor.vue'
 
 definePageMeta({
   middleware: 'auth'
