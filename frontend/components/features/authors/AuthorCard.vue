@@ -53,7 +53,7 @@
       <!-- Краткая статистика -->
       <div class="grid grid-cols-4 gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
         <!-- Публикации -->
-        <div class="text-center">
+        <div class="group/stat text-center cursor-default">
           <div class="flex items-center justify-center gap-1 text-xs text-gray-400 dark:text-gray-500">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9"/>
@@ -62,11 +62,11 @@
               {{ author.posts_count || 0 }}
             </span>
           </div>
-          <span class="text-[10px] text-gray-400 dark:text-gray-500">Публикаций</span>
+          <span class="block text-[10px] text-gray-400 dark:text-gray-500 opacity-0 group-hover/stat:opacity-100 transition-opacity duration-200">Публикаций</span>
         </div>
 
         <!-- Подписчики -->
-        <div class="text-center">
+        <div class="group/stat text-center cursor-default">
           <div class="flex items-center justify-center gap-1 text-xs text-gray-400 dark:text-gray-500">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -75,11 +75,11 @@
               {{ author.subscribers_count || 0 }}
             </span>
           </div>
-          <span class="text-[10px] text-gray-400 dark:text-gray-500">Подписчиков</span>
+          <span class="block text-[10px] text-gray-400 dark:text-gray-500 opacity-0 group-hover/stat:opacity-100 transition-opacity duration-200">Подписчиков</span>
         </div>
 
         <!-- Просмотры -->
-        <div class="text-center">
+        <div class="group/stat text-center cursor-default">
           <div class="flex items-center justify-center gap-1 text-xs text-gray-400 dark:text-gray-500">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -89,11 +89,11 @@
               {{ author.total_views || 0 }}
             </span>
           </div>
-          <span class="text-[10px] text-gray-400 dark:text-gray-500">Просмотров</span>
+          <span class="block text-[10px] text-gray-400 dark:text-gray-500 opacity-0 group-hover/stat:opacity-100 transition-opacity duration-200">Просмотров</span>
         </div>
 
         <!-- Лайки -->
-        <div class="text-center">
+        <div class="group/stat text-center cursor-default">
           <div class="flex items-center justify-center gap-1 text-xs text-gray-400 dark:text-gray-500">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
@@ -102,7 +102,7 @@
               {{ author.total_likes || 0 }}
             </span>
           </div>
-          <span class="text-[10px] text-gray-400 dark:text-gray-500">Лайков</span>
+          <span class="block text-[10px] text-gray-400 dark:text-gray-500 opacity-0 group-hover/stat:opacity-100 transition-opacity duration-200">Лайков</span>
         </div>
       </div>
       
