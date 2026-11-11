@@ -43,6 +43,16 @@ class LikeViewSet(viewsets.ModelViewSet):
             else:
                 like = Like.objects.create(user=request.user, post=post)
                 serializer = self.get_serializer(like)
+                # Уведомление автору поста (не самому себе)
+                if post.author != request.user:
+                    from notifications.models import notify
+
+                    notify(
+                        post.author,
+                        "like",
+                        f"{request.user.username} оценил вашу публикацию «{post.title[:50]}»",
+                        f"/posts/{post.id}",
+                    )
                 return Response(
                     {
                         "detail": "Лайк поставлен",
@@ -76,6 +86,16 @@ class LikeViewSet(viewsets.ModelViewSet):
             else:
                 like = Like.objects.create(user=request.user, comment=comment)
                 serializer = self.get_serializer(like)
+                # Уведомление автору комментария (не самому себе)
+                if comment.author != request.user:
+                    from notifications.models import notify
+
+                    notify(
+                        comment.author,
+                        "like",
+                        f"{request.user.username} оценил ваш комментарий",
+                        f"/posts/{comment.post_id}#comment-{comment.id}",
+                    )
                 return Response(
                     {
                         "detail": "Лайк поставлен",

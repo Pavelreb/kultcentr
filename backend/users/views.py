@@ -1,7 +1,9 @@
 from rest_framework import generics, permissions, status, filters
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import (
     RegisterSerializer,
@@ -30,6 +32,53 @@ class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = UserSerializer
+
+
+class SubscribeView(APIView):
+    """Подписка/отписка на автора: POST /api/auth/users/<id>/subscribe/"""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        from .models import Subscription
+        from notifications.models import notify
+
+        author = get_object_or_404(User, pk=pk)
+
+        if author.role not in ("author", "editor"):
+            return Response(
+                {"detail": "Подписаться можно только на автора или редактора"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if author == request.user:
+            return Response(
+                {"detail": "Нельзя подписаться на себя"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        subscription = Subscription.objects.filter(
+            subscriber=request.user, author=author
+        ).first()
+
+        if subscription:
+            subscription.delete()
+            subscribed = False
+        else:
+            Subscription.objects.create(subscriber=request.user, author=author)
+            subscribed = True
+            notify(
+                author,
+                "subscription",
+                f"На вас подписался {request.user.username}",
+                f"/users/{request.user.id}",
+            )
+
+        return Response(
+            {
+                "subscribed": subscribed,
+                "subscribers_count": author.subscribers.count(),
+            }
+        )
 
 
 class UserListView(generics.ListAPIView):
