@@ -65,7 +65,10 @@ class BannerUpdateView(generics.UpdateAPIView):
                     instance.background_image = None
                 instance.background_image_url = None
 
-        data = request.data.copy()
+        # QueryDict.copy() делает deepcopy и падает на больших файлах
+        # (TemporaryUploadedFile: cannot pickle 'BufferedRandom'),
+        # поэтому берём обычный dict — файлы передаются по ссылке
+        data = request.data.dict()
 
         if should_remove_image:
             if "background_image_url" in data:
