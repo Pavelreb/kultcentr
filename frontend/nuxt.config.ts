@@ -4,7 +4,9 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
     public: {
-      apiBase: 'http://127.0.0.1:8000/api'
+      // В продакшене задаётся переменной окружения NUXT_PUBLIC_API_BASE
+      // Например: https://ваш-домен.ru/api (Nginx проксирует на Django)
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://127.0.0.1:8000/api'
     }
   },
   app: {
