@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -29,7 +30,8 @@ class LastActivityMiddleware:
                 or (now - user.last_activity).total_seconds() > 60
             ):
                 # update() без сигналов, чтобы не дёргать лишнее
-                type(user).objects.filter(pk=user.pk).update(last_activity=now)
+                # request.user — SimpleLazyObject, поэтому берём модель напрямую
+                get_user_model().objects.filter(pk=user.pk).update(last_activity=now)
                 user.last_activity = now
 
         return self.get_response(request)
